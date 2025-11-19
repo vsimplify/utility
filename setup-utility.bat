@@ -158,17 +158,19 @@ echo [SUCCESS] pom.xml versions already updated (pre-applied)
 REM Step 5: Run Maven build
 echo [STEP] Running Maven build...
 
-REM Check if Maven wrapper exists
-if exist "mvnw.cmd" (
-    set MAVEN_COMMAND=mvnw.cmd
+REM Check if Maven is available (prefer system Maven over wrapper)
+where mvn >nul 2>&1
+if not errorlevel 1 (
+    set MAVEN_COMMAND=mvn
 ) else (
-    where mvn >nul 2>&1
-    if errorlevel 1 (
-        echo [ERROR] Maven not found. Please install Maven or ensure mvnw.cmd exists.
+    if exist "mvnw.cmd" (
+        set MAVEN_COMMAND=mvnw.cmd
+    ) else (
+        echo [ERROR] Maven not found. Please install Maven from https://maven.apache.org/download.cgi
+        echo Extract to a folder and add bin to PATH environment variable.
         pause
         exit /b 1
     )
-    set MAVEN_COMMAND=mvn
 )
 
 echo   Running: %MAVEN_COMMAND% clean install
