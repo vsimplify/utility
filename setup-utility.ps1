@@ -108,7 +108,8 @@ Write-Step "Configuring Maven settings.xml..."
 
 $SETTINGS_FILE = "$M2_DIR\settings.xml"
 
-# Build XML using string concatenation to avoid here-string issues
+# Build XML using here-string with variable interpolation
+$UserProfilePath = $env:USERPROFILE -replace '\\', '/'
 $SettingsXml = @"
 <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 https://maven.apache.org/xsd/settings-1.0.0.xsd">
   <profiles>
@@ -117,7 +118,7 @@ $SettingsXml = @"
       <repositories>
         <repository>
           <id>ibm-bamoe-enterprise-maven-repository</id>
-          <url>file:///$($env:USERPROFILE -replace '\\', '/')/.m2/repository/$BAMOE_REPO_NAME</url>
+          <url>file:///$UserProfilePath/.m2/repository/$BAMOE_REPO_NAME</url>
           <releases>
             <enabled>true</enabled>
           </releases>
@@ -129,7 +130,7 @@ $SettingsXml = @"
       <pluginRepositories>
         <pluginRepository>
           <id>ibm-bamoe-enterprise-maven-repository</id>
-          <url>file:///$($env:USERPROFILE -replace '\\', '/')/.m2/repository/$BAMOE_REPO_NAME</url>
+          <url>file:///$UserProfilePath/.m2/repository/$BAMOE_REPO_NAME</url>
           <releases>
             <enabled>true</enabled>
           </releases>
