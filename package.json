@@ -1,0 +1,29 @@
+{
+  "name": "dcss-guideline-calculator-forms",
+  "version": "1.0.0",
+  "description": "PatternFly-based React forms for DCSS Guideline Calculator (BAMOE Extension Generated)",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc && webpack --mode=production",
+    "dev": "tsc && webpack --mode=development",
+    "watch": "tsc --watch",
+    "clean": "rm -rf dist src/main/resources/META-INF/resources/js"
+  },
+  "dependencies": {
+    "@patternfly/react-core": "^5.1.1",
+    "@patternfly/react-icons": "^5.1.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/eslint": "^9.6.1",
+    "@types/node": "^24.10.1",
+    "@types/prop-types": "^15.7.15",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.3.0",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4"
+  }
+}

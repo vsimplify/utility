@@ -1,0 +1,880 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                   xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+                   xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+                   xmlns:bpsim="http://www.bpsim.org/schemas/1.0" 
+                   xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" 
+                   xmlns:di="http://www.omg.org/spec/DD/20100524/DI" 
+                   xmlns:drools="http://www.jboss.org/drools" 
+                   id="GuidelineCalculator" 
+                   targetNamespace="http://www.omg.org/bpmn20" 
+                   expressionLanguage="http://www.mvel.org/2.0" 
+                   typeLanguage="http://www.java.com/javaTypes">
+  
+  <!-- Item Definitions (Process Variable Types) -->
+  <bpmn2:itemDefinition id="_childrenCountItem" structureRef="Integer" />
+  <bpmn2:itemDefinition id="_dependentInfoItem" structureRef="gov.ca.dcss.guidelinecalculator.model.DependentInfo" />
+  <bpmn2:itemDefinition id="_parentAIncomeItem" structureRef="Double" />
+  <bpmn2:itemDefinition id="_parentBIncomeItem" structureRef="Double" />
+  <bpmn2:itemDefinition id="_custodyPercentageItem" structureRef="Double" />
+  <bpmn2:itemDefinition id="_childSupportAmountItem" structureRef="Double" />
+  <bpmn2:itemDefinition id="_validationStatusItem" structureRef="String" />
+  
+  <!-- Main Process Definition -->
+  <bpmn2:process id="guidelinecalculator" 
+                 name="CA Child Support Guideline Calculator" 
+                 isExecutable="true" 
+                 drools:packageName="gov.ca.dcss.guidelinecalculator" 
+                 drools:version="1.0">
+    
+    <!-- Process Variables (Global Scope) -->
+    <bpmn2:property id="childrenCount" name="Children Count" itemSubjectRef="_childrenCountItem" />
+    <bpmn2:property id="dependentInfo" name="Dependent Information" itemSubjectRef="_dependentInfoItem" />
+    <bpmn2:property id="parentA_GrossIncome" name="Parent A Gross Income" itemSubjectRef="_parentAIncomeItem" />
+    <bpmn2:property id="parentB_GrossIncome" name="Parent B Gross Income" itemSubjectRef="_parentBIncomeItem" />
+    <bpmn2:property id="parentA_NetDisposableIncome" name="Parent A Net Disposable Income" itemSubjectRef="_parentAIncomeItem" />
+    <bpmn2:property id="parentB_NetDisposableIncome" name="Parent B Net Disposable Income" itemSubjectRef="_parentBIncomeItem" />
+    <bpmn2:property id="netDisposableIncomeTotal" name="Total Net Disposable Income" itemSubjectRef="_parentAIncomeItem" />
+    <bpmn2:property id="netDisposableIncomeHigh" name="Higher Net Disposable Income" itemSubjectRef="_parentAIncomeItem" />
+    <bpmn2:property id="custodyPercentageHigh" name="Higher Custody Percentage" itemSubjectRef="_custodyPercentageItem" />
+    <bpmn2:property id="kFactor" name="K Factor" itemSubjectRef="_custodyPercentageItem" />
+    <bpmn2:property id="childSupportAmount" name="Child Support Amount" itemSubjectRef="_childSupportAmountItem" />
+    <bpmn2:property id="validationStatus" name="Validation Status" itemSubjectRef="_validationStatusItem" />
+    
+    <!-- Start Event -->
+    <bpmn2:startEvent id="startEvent" name="Form Submission">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue>Form Submission</drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:outgoing>_1-_2</bpmn2:outgoing>
+    </bpmn2:startEvent>
+    
+    <!-- User Task 1: Enter Number of Children -->
+    <bpmn2:userTask id="Task_EnterChildren" 
+                    name="Enter # of Children" 
+                    drools:taskName="EnterChildren">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue>Enter # of Children</drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>_1-_2</bpmn2:incoming>
+      <bpmn2:outgoing>_2-_3</bpmn2:outgoing>
+      
+      <!-- IO Specification -->
+      <bpmn2:ioSpecification id="IOSpec_EnterChildren">
+        <!-- Inputs -->
+        <bpmn2:dataInput id="TaskName_EnterChildren" name="TaskName" drools:dtype="String" />
+        <bpmn2:dataInput id="Input_childrenCount" name="childrenCount" drools:dtype="Integer" itemSubjectRef="_childrenCountItem" />
+        
+        <!-- Outputs -->
+        <bpmn2:dataOutput id="Output_childrenCount" name="childrenCount" drools:dtype="Integer" itemSubjectRef="_childrenCountItem" />
+        
+        <!-- Input Set -->
+        <bpmn2:inputSet id="InputSet_EnterChildren">
+          <bpmn2:dataInputRefs>TaskName_EnterChildren</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Input_childrenCount</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        
+        <!-- Output Set -->
+        <bpmn2:outputSet id="OutputSet_EnterChildren">
+          <bpmn2:dataOutputRefs>Output_childrenCount</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+      </bpmn2:ioSpecification>
+      
+      <!-- Data Input Associations -->
+      <bpmn2:dataInputAssociation id="DIA_TaskName_EnterChildren">
+        <bpmn2:targetRef>TaskName_EnterChildren</bpmn2:targetRef>
+        <bpmn2:assignment id="Assignment_TaskName_EnterChildren">
+          <bpmn2:from xsi:type="bpmn2:tFormalExpression">EnterChildren</bpmn2:from>
+          <bpmn2:to xsi:type="bpmn2:tFormalExpression">TaskName_EnterChildren</bpmn2:to>
+        </bpmn2:assignment>
+      </bpmn2:dataInputAssociation>
+      
+      <bpmn2:dataInputAssociation id="DIA_Input_childrenCount">
+        <bpmn2:sourceRef>childrenCount</bpmn2:sourceRef>
+        <bpmn2:targetRef>Input_childrenCount</bpmn2:targetRef>
+      </bpmn2:dataInputAssociation>
+      
+      <!-- Data Output Associations -->
+      <bpmn2:dataOutputAssociation id="DOA_Output_childrenCount">
+        <bpmn2:sourceRef>Output_childrenCount</bpmn2:sourceRef>
+        <bpmn2:targetRef>childrenCount</bpmn2:targetRef>
+      </bpmn2:dataOutputAssociation>
+    </bpmn2:userTask>
+    
+    <!-- Exclusive Gateway: Validate Children Count -->
+    <bpmn2:exclusiveGateway id="Gateway_ValidateChildren" name="Valid Children?" gatewayDirection="Diverging">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue>Valid Children?</drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>_2-_3</bpmn2:incoming>
+      <bpmn2:outgoing>_3-_4</bpmn2:outgoing>
+      <bpmn2:outgoing>_3-_Error</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    
+    <!-- User Task 2: Input Dependent Information -->
+    <bpmn2:userTask id="Task_InputDependentInfo" 
+                    name="Enter Dependent Info" 
+                    drools:taskName="InputDependentInfo">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue>Enter Dependent Information</drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>_3-_4</bpmn2:incoming>
+      <bpmn2:outgoing>_4-_5</bpmn2:outgoing>
+      
+      <!-- IO Specification -->
+      <bpmn2:ioSpecification id="IOSpec_InputDependentInfo">
+        <!-- Inputs -->
+        <bpmn2:dataInput id="TaskName_DependentInfo" name="TaskName" drools:dtype="String" />
+        <bpmn2:dataInput id="Input_childrenCount_Task2" name="childrenCount" drools:dtype="Integer" itemSubjectRef="_childrenCountItem" />
+        <bpmn2:dataInput id="Input_dependentInfo" name="dependentInfo" drools:dtype="gov.ca.dcss.guidelinecalculator.model.DependentInfo" itemSubjectRef="_dependentInfoItem" />
+        
+        <!-- Outputs -->
+        <bpmn2:dataOutput id="Output_dependentInfo" name="dependentInfo" drools:dtype="gov.ca.dcss.guidelinecalculator.model.DependentInfo" itemSubjectRef="_dependentInfoItem" />
+        <bpmn2:dataOutput id="Output_parentA_Income" name="parentA_GrossIncome" drools:dtype="Double" itemSubjectRef="_parentAIncomeItem" />
+        <bpmn2:dataOutput id="Output_parentB_Income" name="parentB_GrossIncome" drools:dtype="Double" itemSubjectRef="_parentBIncomeItem" />
+        <bpmn2:dataOutput id="Output_custodyPercentage" name="custodyPercentageHigh" drools:dtype="Double" itemSubjectRef="_custodyPercentageItem" />
+        
+        <!-- Input Set -->
+        <bpmn2:inputSet id="InputSet_DependentInfo">
+          <bpmn2:dataInputRefs>TaskName_DependentInfo</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Input_childrenCount_Task2</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Input_dependentInfo</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        
+        <!-- Output Set -->
+        <bpmn2:outputSet id="OutputSet_DependentInfo">
+          <bpmn2:dataOutputRefs>Output_dependentInfo</bpmn2:dataOutputRefs>
+          <bpmn2:dataOutputRefs>Output_parentA_Income</bpmn2:dataOutputRefs>
+          <bpmn2:dataOutputRefs>Output_parentB_Income</bpmn2:dataOutputRefs>
+          <bpmn2:dataOutputRefs>Output_custodyPercentage</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+      </bpmn2:ioSpecification>
+      
+      <!-- Data Input Associations -->
+      <bpmn2:dataInputAssociation id="DIA_TaskName_DependentInfo">
+        <bpmn2:targetRef>TaskName_DependentInfo</bpmn2:targetRef>
+        <bpmn2:assignment id="Assignment_TaskName_DependentInfo">
+          <bpmn2:from xsi:type="bpmn2:tFormalExpression">InputDependentInfo</bpmn2:from>
+          <bpmn2:to xsi:type="bpmn2:tFormalExpression">TaskName_DependentInfo</bpmn2:to>
+        </bpmn2:assignment>
+      </bpmn2:dataInputAssociation>
+      
+      <bpmn2:dataInputAssociation id="DIA_childrenCount_Task2">
+        <bpmn2:sourceRef>childrenCount</bpmn2:sourceRef>
+        <bpmn2:targetRef>Input_childrenCount_Task2</bpmn2:targetRef>
+      </bpmn2:dataInputAssociation>
+      
+      <bpmn2:dataInputAssociation id="DIA_dependentInfo">
+        <bpmn2:sourceRef>dependentInfo</bpmn2:sourceRef>
+        <bpmn2:targetRef>Input_dependentInfo</bpmn2:targetRef>
+      </bpmn2:dataInputAssociation>
+      
+      <!-- Data Output Associations -->
+      <bpmn2:dataOutputAssociation id="DOA_dependentInfo">
+        <bpmn2:sourceRef>Output_dependentInfo</bpmn2:sourceRef>
+        <bpmn2:targetRef>dependentInfo</bpmn2:targetRef>
+      </bpmn2:dataOutputAssociation>
+      
+      <bpmn2:dataOutputAssociation id="DOA_parentA_Income">
+        <bpmn2:sourceRef>Output_parentA_Income</bpmn2:sourceRef>
+        <bpmn2:targetRef>parentA_GrossIncome</bpmn2:targetRef>
+      </bpmn2:dataOutputAssociation>
+      
+      <bpmn2:dataOutputAssociation id="DOA_parentB_Income">
+        <bpmn2:sourceRef>Output_parentB_Income</bpmn2:sourceRef>
+        <bpmn2:targetRef>parentB_GrossIncome</bpmn2:targetRef>
+      </bpmn2:dataOutputAssociation>
+      
+      <bpmn2:dataOutputAssociation id="DOA_custodyPercentage">
+        <bpmn2:sourceRef>Output_custodyPercentage</bpmn2:sourceRef>
+        <bpmn2:targetRef>custodyPercentageHigh</bpmn2:targetRef>
+      </bpmn2:dataOutputAssociation>
+    </bpmn2:userTask>
+    
+    <!-- Service Task: Calculate Child Support -->
+    <bpmn2:serviceTask id="Task_CalculateCS" 
+                       name="Calculate Child Support" 
+                       drools:taskName="CalculateCS" 
+                       drools:implementation="Java" 
+                       drools:operationRef="_4-_5-_ServiceOperation">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue>Calculate Child Support Formula</drools:metaValue>
+        </drools:metaData>
+        <drools:onEntry-script scriptFormat="http://www.java.com/java">
+          <drools:script>System.out.println("Starting CS calculation for process: " + kcontext.getProcessInstance().getId());</drools:script>
+        </drools:onEntry-script>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>_4-_5</bpmn2:incoming>
+      <bpmn2:outgoing>_5-_6</bpmn2:outgoing>
+      
+      <!-- IO Specification -->
+      <bpmn2:ioSpecification id="IOSpec_CalculateCS">
+        <!-- Inputs (from process variables) -->
+        <bpmn2:dataInput id="Input_CS_childrenCount" name="childrenCount" drools:dtype="Integer" itemSubjectRef="_childrenCountItem" />
+        <bpmn2:dataInput id="Input_CS_parentA_Income" name="parentA_GrossIncome" drools:dtype="Double" itemSubjectRef="_parentAIncomeItem" />
+        <bpmn2:dataInput id="Input_CS_parentB_Income" name="parentB_GrossIncome" drools:dtype="Double" itemSubjectRef="_parentBIncomeItem" />
+        <bpmn2:dataInput id="Input_CS_custodyPercent" name="custodyPercentageHigh" drools:dtype="Double" itemSubjectRef="_custodyPercentageItem" />
+        
+        <!-- Outputs (calculated results) -->
+        <bpmn2:dataOutput id="Output_CS_Amount" name="childSupportAmount" drools:dtype="Double" itemSubjectRef="_childSupportAmountItem" />
+        <bpmn2:dataOutput id="Output_CS_kFactor" name="kFactor" drools:dtype="Double" itemSubjectRef="_custodyPercentageItem" />
+        <bpmn2:dataOutput id="Output_CS_NetIncomeHigh" name="netDisposableIncomeHigh" drools:dtype="Double" itemSubjectRef="_parentAIncomeItem" />
+        <bpmn2:dataOutput id="Output_CS_NetIncomeTotal" name="netDisposableIncomeTotal" drools:dtype="Double" itemSubjectRef="_parentAIncomeItem" />
+        
+        <!-- Input Set -->
+        <bpmn2:inputSet id="InputSet_CalculateCS">
+          <bpmn2:dataInputRefs>Input_CS_childrenCount</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Input_CS_parentA_Income</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Input_CS_parentB_Income</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Input_CS_custodyPercent</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        
+        <!-- Output Set -->
+        <bpmn2:outputSet id="OutputSet_CalculateCS">
+          <bpmn2:dataOutputRefs>Output_CS_Amount</bpmn2:dataOutputRefs>
+          <bpmn2:dataOutputRefs>Output_CS_kFactor</bpmn2:dataOutputRefs>
+          <bpmn2:dataOutputRefs>Output_CS_NetIncomeHigh</bpmn2:dataOutputRefs>
+          <bpmn2:dataOutputRefs>Output_CS_NetIncomeTotal</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+      </bpmn2:ioSpecification>
+      
+      <!-- Data Input Associations -->
+      <bpmn2:dataInputAssociation id="DIA_CS_childrenCount">
+        <bpmn2:sourceRef>childrenCount</bpmn2:sourceRef>
+        <bpmn2:targetRef>Input_CS_childrenCount</bpmn2:targetRef>
+      </bpmn2:dataInputAssociation>
+      
+      <bpmn2:dataInputAssociation id="DIA_CS_parentA_Income">
+        <bpmn2:sourceRef>parentA_GrossIncome</bpmn2:sourceRef>
+        <bpmn2:targetRef>Input_CS_parentA_Income</bpmn2:targetRef>
+      </bpmn2:dataInputAssociation>
+      
+      <bpmn2:dataInputAssociation id="DIA_CS_parentB_Income">
+        <bpmn2:sourceRef>parentB_GrossIncome</bpmn2:sourceRef>
+        <bpmn2:targetRef>Input_CS_parentB_Income</bpmn2:targetRef>
+      </bpmn2:dataInputAssociation>
+      
+      <bpmn2:dataInputAssociation id="DIA_CS_custodyPercent">
+        <bpmn2:sourceRef>custodyPercentageHigh</bpmn2:sourceRef>
+        <bpmn2:targetRef>Input_CS_custodyPercent</bpmn2:targetRef>
+      </bpmn2:dataInputAssociation>
+      
+      <!-- Data Output Associations -->
+      <bpmn2:dataOutputAssociation id="DOA_CS_Amount">
+        <bpmn2:sourceRef>Output_CS_Amount</bpmn2:sourceRef>
+        <bpmn2:targetRef>childSupportAmount</bpmn2:targetRef>
+      </bpmn2:dataOutputAssociation>
+      
+      <bpmn2:dataOutputAssociation id="DOA_CS_kFactor">
+        <bpmn2:sourceRef>Output_CS_kFactor</bpmn2:sourceRef>
+        <bpmn2:targetRef>kFactor</bpmn2:targetRef>
+      </bpmn2:dataOutputAssociation>
+      
+      <bpmn2:dataOutputAssociation id="DOA_CS_NetIncomeHigh">
+        <bpmn2:sourceRef>Output_CS_NetIncomeHigh</bpmn2:sourceRef>
+        <bpmn2:targetRef>netDisposableIncomeHigh</bpmn2:targetRef>
+      </bpmn2:dataOutputAssociation>
+      
+      <bpmn2:dataOutputAssociation id="DOA_CS_NetIncomeTotal">
+        <bpmn2:sourceRef>Output_CS_NetIncomeTotal</bpmn2:sourceRef>
+        <bpmn2:targetRef>netDisposableIncomeTotal</bpmn2:targetRef>
+      </bpmn2:dataOutputAssociation>
+    </bpmn2:serviceTask>
+    
+    <!-- End Event: Success -->
+    <bpmn2:endEvent id="endEvent" name="Calculation Complete">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue>Calculation Complete</drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>_5-_6</bpmn2:incoming>
+    </bpmn2:endEvent>
+    
+    <!-- End Event: Error -->
+    <bpmn2:endEvent id="endEvent_Error" name="Error: Invalid Children">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue>Error: Invalid Children</drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>_3-_Error</bpmn2:incoming>
+      <bpmn2:errorEventDefinition id="ErrorEventDef_InvalidChildren" errorRef="Error_InvalidChildren" />
+    </bpmn2:endEvent>
+    
+    <!-- Sequence Flows -->
+    <bpmn2:sequenceFlow id="_1-_2" sourceRef="startEvent" targetRef="Task_EnterChildren" />
+    
+    <bpmn2:sequenceFlow id="_2-_3" sourceRef="Task_EnterChildren" targetRef="Gateway_ValidateChildren" />
+    
+    <bpmn2:sequenceFlow id="_3-_4" name="Valid" sourceRef="Gateway_ValidateChildren" targetRef="Task_InputDependentInfo">
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression" language="http://www.java.com/java">return childrenCount != null &amp;&amp; childrenCount &gt;= 1 &amp;&amp; childrenCount &lt;= 20;</bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
+    
+    <bpmn2:sequenceFlow id="_3-_Error" name="Invalid" sourceRef="Gateway_ValidateChildren" targetRef="endEvent_Error">
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression" language="http://www.java.com/java">return childrenCount == null || childrenCount &lt; 1 || childrenCount &gt; 20;</bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
+    
+    <bpmn2:sequenceFlow id="_4-_5" sourceRef="Task_InputDependentInfo" targetRef="Task_CalculateCS" />
+    
+    <bpmn2:sequenceFlow id="_5-_6" sourceRef="Task_CalculateCS" targetRef="endEvent" />
+    
+  </bpmn2:process>
+  
+  <!-- Error Definition -->
+  <bpmn2:error id="Error_InvalidChildren" errorCode="InvalidChildren" name="Invalid Children Count" structureRef="_validationStatusItem" />
+  
+  <!-- BPMN Diagram (Visual Layout) -->
+  <bpmndi:BPMNDiagram id="BPMNDiagram_GuidelineCalculator">
+    <bpmndi:BPMNPlane bpmnElement="guidelinecalculator" id="BPMNPlane_GuidelineCalculator">
+      
+      <!-- Start Event Shape -->
+      <bpmndi:BPMNShape bpmnElement="startEvent" id="BPMNShape_startEvent">
+        <dc:Bounds x="100" y="100" width="30" height="30" />
+      </bpmndi:BPMNShape>
+      
+      <!-- Task 1: Enter Children Shape -->
+      <bpmndi:BPMNShape bpmnElement="Task_EnterChildren" id="BPMNShape_Task_EnterChildren">
+        <dc:Bounds x="180" y="75" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <!-- Gateway: Validate Children Shape -->
+      <bpmndi:BPMNShape bpmnElement="Gateway_ValidateChildren" id="BPMNShape_Gateway_ValidateChildren">
+        <dc:Bounds x="330" y="95" width="40" height="40" />
+      </bpmndi:BPMNShape>
+      
+      <!-- Task 2: Input Dependent Info Shape -->
+      <bpmndi:BPMNShape bpmnElement="Task_InputDependentInfo" id="BPMNShape_Task_InputDependentInfo">
+        <dc:Bounds x="420" y="75" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <!-- Service Task: Calculate CS Shape -->
+      <bpmndi:BPMNShape bpmnElement="Task_CalculateCS" id="BPMNShape_Task_CalculateCS">
+        <dc:Bounds x="570" y="75" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <!-- End Event: Success Shape -->
+      <bpmndi:BPMNShape bpmnElement="endEvent" id="BPMNShape_endEvent">
+        <dc:Bounds x="720" y="100" width="30" height="30" />
+      </bpmndi:BPMNShape>
+      
+      <!-- End Event: Error Shape -->
+      <bpmndi:BPMNShape bpmnElement="endEvent_Error" id="BPMNShape_endEvent_Error">
+        <dc:Bounds x="330" y="200" width="30" height="30" />
+      </bpmndi:BPMNShape>
+      
+      <!-- Sequence Flow Edges -->
+      <bpmndi:BPMNEdge bpmnElement="_1-_2" id="BPMNEdge__1-_2">
+        <di:waypoint x="130" y="115" />
+        <di:waypoint x="180" y="115" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge bpmnElement="_2-_3" id="BPMNEdge__2-_3">
+        <di:waypoint x="280" y="115" />
+        <di:waypoint x="330" y="115" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge bpmnElement="_3-_4" id="BPMNEdge__3-_4">
+        <di:waypoint x="370" y="115" />
+        <di:waypoint x="420" y="115" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge bpmnElement="_3-_Error" id="BPMNEdge__3-_Error">
+        <di:waypoint x="350" y="135" />
+        <di:waypoint x="345" y="200" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge bpmnElement="_4-_5" id="BPMNEdge__4-_5">
+        <di:waypoint x="520" y="115" />
+        <di:waypoint x="570" y="115" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge bpmnElement="_5-_6" id="BPMNEdge__5-_6">
+        <di:waypoint x="670" y="115" />
+        <di:waypoint x="720" y="115" />
+      </bpmndi:BPMNEdge>
+      
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+  
+</bpmn2:definitions><?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                   xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+                   xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+                   xmlns:bpsim="http://www.bpsim.org/schemas/1.0" 
+                   xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" 
+                   xmlns:di="http://www.omg.org/spec/DD/20100524/DI" 
+                   xmlns:drools="http://www.jboss.org/drools" 
+                   id="GuidelineCalculator" 
+                   targetNamespace="http://www.omg.org/bpmn20" 
+                   expressionLanguage="http://www.mvel.org/2.0" 
+                   typeLanguage="http://www.java.com/javaTypes">
+  
+  <!-- ============================================ -->
+  <!-- ITEM DEFINITIONS (Process Variable Types)   -->
+  <!-- ============================================ -->
+  <bpmn2:itemDefinition id="_childrenCountItem" structureRef="Integer" />
+  <bpmn2:itemDefinition id="_dependentInfoItem" structureRef="gov.ca.dcss.guidelinecalculator.model.DependentInfo" />
+  <bpmn2:itemDefinition id="_parentAIncomeItem" structureRef="Double" />
+  <bpmn2:itemDefinition id="_parentBIncomeItem" structureRef="Double" />
+  <bpmn2:itemDefinition id="_custodyPercentageItem" structureRef="Double" />
+  <bpmn2:itemDefinition id="_childSupportAmountItem" structureRef="Double" />
+  <bpmn2:itemDefinition id="_validationStatusItem" structureRef="String" />
+  
+  <!-- ============================================ -->
+  <!-- MAIN PROCESS DEFINITION                    -->
+  <!-- ============================================ -->
+  <bpmn2:process id="guidelinecalculator" 
+                 name="CA Child Support Guideline Calculator" 
+                 isExecutable="true" 
+                 drools:packageName="gov.ca.dcss.guidelinecalculator" 
+                 drools:version="1.0">
+    
+    <!-- ============================================ -->
+    <!-- PROCESS VARIABLES (Global Scope)            -->
+    <!-- ============================================ -->
+    <bpmn2:property id="childrenCount" itemSubjectRef="_childrenCountItem" />
+    <bpmn2:property id="dependentInfo" itemSubjectRef="_dependentInfoItem" />
+    <bpmn2:property id="parentA_GrossIncome" itemSubjectRef="_parentAIncomeItem" />
+    <bpmn2:property id="parentB_GrossIncome" itemSubjectRef="_parentBIncomeItem" />
+    <bpmn2:property id="parentA_NetDisposableIncome" itemSubjectRef="_parentAIncomeItem" />
+    <bpmn2:property id="parentB_NetDisposableIncome" itemSubjectRef="_parentBIncomeItem" />
+    <bpmn2:property id="netDisposableIncomeTotal" itemSubjectRef="_parentAIncomeItem" />
+    <bpmn2:property id="netDisposableIncomeHigh" itemSubjectRef="_parentAIncomeItem" />
+    <bpmn2:property id="custodyPercentageHigh" itemSubjectRef="_custodyPercentageItem" />
+    <bpmn2:property id="kFactor" itemSubjectRef="_custodyPercentageItem" />
+    <bpmn2:property id="childSupportAmount" itemSubjectRef="_childSupportAmountItem" />
+    <bpmn2:property id="validationStatus" itemSubjectRef="_validationStatusItem" />
+    
+    <!-- ============================================ -->
+    <!-- START EVENT                                 -->
+    <!-- ============================================ -->
+    <bpmn2:startEvent id="startEvent" name="Form Submission">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue>Form Submission</drools:metaValue>
+        </drools:metaData>
+        <drools:metaData name="customIcon">
+          <drools:metaValue>fa-play-circle</drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:outgoing>_1-_2</bpmn2:outgoing>
+    </bpmn2:startEvent>
+    
+    <!-- ============================================ -->
+    <!-- USER TASK 1: ENTER NUMBER OF CHILDREN      -->
+    <!-- ============================================ -->
+    <bpmn2:userTask id="Task_EnterChildren" 
+                    name="Enter # of Children" 
+                    drools:taskName="EnterChildren"
+                    drools:formKey="dcss-children-form">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue>Enter # of Children</drools:metaValue>
+        </drools:metaData>
+        <drools:metaData name="customIcon">
+          <drools:metaValue>fa-child</drools:metaValue>
+        </drools:metaData>
+        <drools:onEntry-script scriptFormat="http://www.java.com/java">
+          <drools:script>System.out.println("Task: Enter # of Children - Process Instance: " + kcontext.getProcessInstance().getId());</drools:script>
+        </drools:onEntry-script>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>_1-_2</bpmn2:incoming>
+      <bpmn2:outgoing>_2-_3</bpmn2:outgoing>
+      
+      <!-- IO Specification for Task 1 -->
+      <bpmn2:ioSpecification id="IOSpec_EnterChildren">
+        <bpmn2:dataInput id="TaskName_EnterChildren" name="TaskName" drools:dtype="String" />
+        <bpmn2:dataInput id="Input_childrenCount" name="childrenCount" drools:dtype="Integer" itemSubjectRef="_childrenCountItem" />
+        <bpmn2:dataOutput id="Output_childrenCount" name="childrenCount" drools:dtype="Integer" itemSubjectRef="_childrenCountItem" />
+        
+        <bpmn2:inputSet id="InputSet_EnterChildren">
+          <bpmn2:dataInputRefs>TaskName_EnterChildren</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Input_childrenCount</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        
+        <bpmn2:outputSet id="OutputSet_EnterChildren">
+          <bpmn2:dataOutputRefs>Output_childrenCount</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+      </bpmn2:ioSpecification>
+      
+      <!-- Data Input Associations -->
+      <bpmn2:dataInputAssociation id="DIA_TaskName_EnterChildren">
+        <bpmn2:targetRef>TaskName_EnterChildren</bpmn2:targetRef>
+        <bpmn2:assignment id="Assignment_TaskName_EnterChildren">
+          <bpmn2:from xsi:type="bpmn2:tFormalExpression">EnterChildren</bpmn2:from>
+          <bpmn2:to xsi:type="bpmn2:tFormalExpression">TaskName_EnterChildren</bpmn2:to>
+        </bpmn2:assignment>
+      </bpmn2:dataInputAssociation>
+      
+      <bpmn2:dataInputAssociation id="DIA_Input_childrenCount">
+        <bpmn2:sourceRef>childrenCount</bpmn2:sourceRef>
+        <bpmn2:targetRef>Input_childrenCount</bpmn2:targetRef>
+      </bpmn2:dataInputAssociation>
+      
+      <!-- Data Output Associations -->
+      <bpmn2:dataOutputAssociation id="DOA_Output_childrenCount">
+        <bpmn2:sourceRef>Output_childrenCount</bpmn2:sourceRef>
+        <bpmn2:targetRef>childrenCount</bpmn2:targetRef>
+      </bpmn2:dataOutputAssociation>
+    </bpmn2:userTask>
+    
+    <!-- ============================================ -->
+    <!-- EXCLUSIVE GATEWAY: VALIDATE CHILDREN       -->
+    <!-- ============================================ -->
+    <bpmn2:exclusiveGateway id="Gateway_ValidateChildren" 
+                            name="Valid Children?" 
+                            gatewayDirection="Diverging">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue>Valid Children?</drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>_2-_3</bpmn2:incoming>
+      <bpmn2:outgoing>_3-_4</bpmn2:outgoing>
+      <bpmn2:outgoing>_3-_Error</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    
+    <!-- ============================================ -->
+    <!-- USER TASK 2: INPUT DEPENDENT INFORMATION   -->
+    <!-- ============================================ -->
+    <bpmn2:userTask id="Task_InputDependentInfo" 
+                    name="Enter Dependent Info" 
+                    drools:taskName="InputDependentInfo"
+                    drools:formKey="dcss-dependent-form">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue>Enter Dependent Information</drools:metaValue>
+        </drools:metaData>
+        <drools:metaData name="customIcon">
+          <drools:metaValue>fa-users</drools:metaValue>
+        </drools:metaData>
+        <drools:onEntry-script scriptFormat="http://www.java.com/java">
+          <drools:script>System.out.println("Task: Enter Dependent Info - Process Instance: " + kcontext.getProcessInstance().getId() + " Children: " + kcontext.getVariable("childrenCount"));</drools:script>
+        </drools:onEntry-script>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>_3-_4</bpmn2:incoming>
+      <bpmn2:outgoing>_4-_5</bpmn2:outgoing>
+      
+      <!-- IO Specification for Task 2 -->
+      <bpmn2:ioSpecification id="IOSpec_InputDependentInfo">
+        <bpmn2:dataInput id="TaskName_DependentInfo" name="TaskName" drools:dtype="String" />
+        <bpmn2:dataInput id="Input_childrenCount_Task2" name="childrenCount" drools:dtype="Integer" itemSubjectRef="_childrenCountItem" />
+        <bpmn2:dataInput id="Input_dependentInfo" name="dependentInfo" drools:dtype="gov.ca.dcss.guidelinecalculator.model.DependentInfo" itemSubjectRef="_dependentInfoItem" />
+        
+        <bpmn2:dataOutput id="Output_dependentInfo" name="dependentInfo" drools:dtype="gov.ca.dcss.guidelinecalculator.model.DependentInfo" itemSubjectRef="_dependentInfoItem" />
+        <bpmn2:dataOutput id="Output_parentA_Income" name="parentA_GrossIncome" drools:dtype="Double" itemSubjectRef="_parentAIncomeItem" />
+        <bpmn2:dataOutput id="Output_parentB_Income" name="parentB_GrossIncome" drools:dtype="Double" itemSubjectRef="_parentBIncomeItem" />
+        <bpmn2:dataOutput id="Output_custodyPercentage" name="custodyPercentageHigh" drools:dtype="Double" itemSubjectRef="_custodyPercentageItem" />
+        
+        <bpmn2:inputSet id="InputSet_DependentInfo">
+          <bpmn2:dataInputRefs>TaskName_DependentInfo</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Input_childrenCount_Task2</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Input_dependentInfo</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        
+        <bpmn2:outputSet id="OutputSet_DependentInfo">
+          <bpmn2:dataOutputRefs>Output_dependentInfo</bpmn2:dataOutputRefs>
+          <bpmn2:dataOutputRefs>Output_parentA_Income</bpmn2:dataOutputRefs>
+          <bpmn2:dataOutputRefs>Output_parentB_Income</bpmn2:dataOutputRefs>
+          <bpmn2:dataOutputRefs>Output_custodyPercentage</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+      </bpmn2:ioSpecification>
+      
+      <!-- Data Input Associations -->
+      <bpmn2:dataInputAssociation id="DIA_TaskName_DependentInfo">
+        <bpmn2:targetRef>TaskName_DependentInfo</bpmn2:targetRef>
+        <bpmn2:assignment id="Assignment_TaskName_DependentInfo">
+          <bpmn2:from xsi:type="bpmn2:tFormalExpression">InputDependentInfo</bpmn2:from>
+          <bpmn2:to xsi:type="bpmn2:tFormalExpression">TaskName_DependentInfo</bpmn2:to>
+        </bpmn2:assignment>
+      </bpmn2:dataInputAssociation>
+      
+      <bpmn2:dataInputAssociation id="DIA_childrenCount_Task2">
+        <bpmn2:sourceRef>childrenCount</bpmn2:sourceRef>
+        <bpmn2:targetRef>Input_childrenCount_Task2</bpmn2:targetRef>
+      </bpmn2:dataInputAssociation>
+      
+      <bpmn2:dataInputAssociation id="DIA_dependentInfo">
+        <bpmn2:sourceRef>dependentInfo</bpmn2:sourceRef>
+        <bpmn2:targetRef>Input_dependentInfo</bpmn2:targetRef>
+      </bpmn2:dataInputAssociation>
+      
+      <!-- Data Output Associations -->
+      <bpmn2:dataOutputAssociation id="DOA_dependentInfo">
+        <bpmn2:sourceRef>Output_dependentInfo</bpmn2:sourceRef>
+        <bpmn2:targetRef>dependentInfo</bpmn2:targetRef>
+      </bpmn2:dataOutputAssociation>
+      
+      <bpmn2:dataOutputAssociation id="DOA_parentA_Income">
+        <bpmn2:sourceRef>Output_parentA_Income</bpmn2:sourceRef>
+        <bpmn2:targetRef>parentA_GrossIncome</bpmn2:targetRef>
+      </bpmn2:dataOutputAssociation>
+      
+      <bpmn2:dataOutputAssociation id="DOA_parentB_Income">
+        <bpmn2:sourceRef>Output_parentB_Income</bpmn2:sourceRef>
+        <bpmn2:targetRef>parentB_GrossIncome</bpmn2:targetRef>
+      </bpmn2:dataOutputAssociation>
+      
+      <bpmn2:dataOutputAssociation id="DOA_custodyPercentage">
+        <bpmn2:sourceRef>Output_custodyPercentage</bpmn2:sourceRef>
+        <bpmn2:targetRef>custodyPercentageHigh</bpmn2:targetRef>
+      </bpmn2:dataOutputAssociation>
+    </bpmn2:userTask>
+    
+    <!-- ============================================ -->
+    <!-- SERVICE TASK: CALCULATE CHILD SUPPORT       -->
+    <!-- ============================================ -->
+    <bpmn2:serviceTask id="Task_CalculateCS" 
+                       name="Calculate Child Support" 
+                       drools:taskName="CalculateCS" 
+                       drools:implementation="Java">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue>Calculate Child Support Formula</drools:metaValue>
+        </drools:metaData>
+        <drools:metaData name="customIcon">
+          <drools:metaValue>fa-calculator</drools:metaValue>
+        </drools:metaData>
+        <drools:onEntry-script scriptFormat="http://www.java.com/java">
+          <drools:script>System.out.println("Starting CS calculation for process: " + kcontext.getProcessInstance().getId() + " Children: " + kcontext.getVariable("childrenCount"));</drools:script>
+        </drools:onEntry-script>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>_4-_5</bpmn2:incoming>
+      <bpmn2:outgoing>_5-_6</bpmn2:outgoing>
+      
+      <!-- IO Specification -->
+      <bpmn2:ioSpecification id="IOSpec_CalculateCS">
+        <bpmn2:dataInput id="Input_CS_childrenCount" name="childrenCount" drools:dtype="Integer" itemSubjectRef="_childrenCountItem" />
+        <bpmn2:dataInput id="Input_CS_parentA_Income" name="parentA_GrossIncome" drools:dtype="Double" itemSubjectRef="_parentAIncomeItem" />
+        <bpmn2:dataInput id="Input_CS_parentB_Income" name="parentB_GrossIncome" drools:dtype="Double" itemSubjectRef="_parentBIncomeItem" />
+        <bpmn2:dataInput id="Input_CS_custodyPercent" name="custodyPercentageHigh" drools:dtype="Double" itemSubjectRef="_custodyPercentageItem" />
+        
+        <bpmn2:dataOutput id="Output_CS_Amount" name="childSupportAmount" drools:dtype="Double" itemSubjectRef="_childSupportAmountItem" />
+        <bpmn2:dataOutput id="Output_CS_kFactor" name="kFactor" drools:dtype="Double" itemSubjectRef="_custodyPercentageItem" />
+        <bpmn2:dataOutput id="Output_CS_NetIncomeHigh" name="netDisposableIncomeHigh" drools:dtype="Double" itemSubjectRef="_parentAIncomeItem" />
+        <bpmn2:dataOutput id="Output_CS_NetIncomeTotal" name="netDisposableIncomeTotal" drools:dtype="Double" itemSubjectRef="_parentAIncomeItem" />
+        
+        <bpmn2:inputSet id="InputSet_CalculateCS">
+          <bpmn2:dataInputRefs>Input_CS_childrenCount</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Input_CS_parentA_Income</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Input_CS_parentB_Income</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Input_CS_custodyPercent</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        
+        <bpmn2:outputSet id="OutputSet_CalculateCS">
+          <bpmn2:dataOutputRefs>Output_CS_Amount</bpmn2:dataOutputRefs>
+          <bpmn2:dataOutputRefs>Output_CS_kFactor</bpmn2:dataOutputRefs>
+          <bpmn2:dataOutputRefs>Output_CS_NetIncomeHigh</bpmn2:dataOutputRefs>
+          <bpmn2:dataOutputRefs>Output_CS_NetIncomeTotal</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+      </bpmn2:ioSpecification>
+      
+      <!-- Data Input Associations -->
+      <bpmn2:dataInputAssociation id="DIA_CS_childrenCount">
+        <bpmn2:sourceRef>childrenCount</bpmn2:sourceRef>
+        <bpmn2:targetRef>Input_CS_childrenCount</bpmn2:targetRef>
+      </bpmn2:dataInputAssociation>
+      
+      <bpmn2:dataInputAssociation id="DIA_CS_parentA_Income">
+        <bpmn2:sourceRef>parentA_GrossIncome</bpmn2:sourceRef>
+        <bpmn2:targetRef>Input_CS_parentA_Income</bpmn2:targetRef>
+      </bpmn2:dataInputAssociation>
+      
+      <bpmn2:dataInputAssociation id="DIA_CS_parentB_Income">
+        <bpmn2:sourceRef>parentB_GrossIncome</bpmn2:sourceRef>
+        <bpmn2:targetRef>Input_CS_parentB_Income</bpmn2:targetRef>
+      </bpmn2:dataInputAssociation>
+      
+      <bpmn2:dataInputAssociation id="DIA_CS_custodyPercent">
+        <bpmn2:sourceRef>custodyPercentageHigh</bpmn2:sourceRef>
+        <bpmn2:targetRef>Input_CS_custodyPercent</bpmn2:targetRef>
+      </bpmn2:dataInputAssociation>
+      
+      <!-- Data Output Associations -->
+      <bpmn2:dataOutputAssociation id="DOA_CS_Amount">
+        <bpmn2:sourceRef>Output_CS_Amount</bpmn2:sourceRef>
+        <bpmn2:targetRef>childSupportAmount</bpmn2:targetRef>
+      </bpmn2:dataOutputAssociation>
+      
+      <bpmn2:dataOutputAssociation id="DOA_CS_kFactor">
+        <bpmn2:sourceRef>Output_CS_kFactor</bpmn2:sourceRef>
+        <bpmn2:targetRef>kFactor</bpmn2:targetRef>
+      </bpmn2:dataOutputAssociation>
+      
+      <bpmn2:dataOutputAssociation id="DOA_CS_NetIncomeHigh">
+        <bpmn2:sourceRef>Output_CS_NetIncomeHigh</bpmn2:sourceRef>
+        <bpmn2:targetRef>netDisposableIncomeHigh</bpmn2:targetRef>
+      </bpmn2:dataOutputAssociation>
+      
+      <bpmn2:dataOutputAssociation id="DOA_CS_NetIncomeTotal">
+        <bpmn2:sourceRef>Output_CS_NetIncomeTotal</bpmn2:sourceRef>
+        <bpmn2:targetRef>netDisposableIncomeTotal</bpmn2:targetRef>
+      </bpmn2:dataOutputAssociation>
+    </bpmn2:serviceTask>
+    
+    <!-- ============================================ -->
+    <!-- END EVENTS                                   -->
+    <!-- ============================================ -->
+    <bpmn2:endEvent id="endEvent" name="Calculation Complete">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue>Calculation Complete</drools:metaValue>
+        </drools:metaData>
+        <drools:metaData name="customIcon">
+          <drools:metaValue>fa-check-circle</drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>_5-_6</bpmn2:incoming>
+    </bpmn2:endEvent>
+    
+    <bpmn2:endEvent id="endEvent_Error" name="Error: Invalid Children">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue>Error: Invalid Children</drools:metaValue>
+        </drools:metaData>
+        <drools:metaData name="customIcon">
+          <drools:metaValue>fa-times-circle</drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>_3-_Error</bpmn2:incoming>
+      <bpmn2:errorEventDefinition id="ErrorEventDef_InvalidChildren" errorRef="Error_InvalidChildren" />
+    </bpmn2:endEvent>
+    
+    <!-- ============================================ -->
+    <!-- SEQUENCE FLOWS                              -->
+    <!-- ============================================ -->
+    <bpmn2:sequenceFlow id="_1-_2" sourceRef="startEvent" targetRef="Task_EnterChildren" />
+    
+    <bpmn2:sequenceFlow id="_2-_3" sourceRef="Task_EnterChildren" targetRef="Gateway_ValidateChildren" />
+    
+    <bpmn2:sequenceFlow id="_3-_4" 
+                        name="Valid" 
+                        sourceRef="Gateway_ValidateChildren" 
+                        targetRef="Task_InputDependentInfo">
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression" language="http://www.java.com/java">return childrenCount != null &amp;&amp; childrenCount &gt;= 1 &amp;&amp; childrenCount &lt;= 20;</bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
+    
+    <bpmn2:sequenceFlow id="_3-_Error" 
+                        name="Invalid" 
+                        sourceRef="Gateway_ValidateChildren" 
+                        targetRef="endEvent_Error">
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression" language="http://www.java.com/java">return childrenCount == null || childrenCount &lt; 1 || childrenCount &gt; 20;</bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
+    
+    <bpmn2:sequenceFlow id="_4-_5" sourceRef="Task_InputDependentInfo" targetRef="Task_CalculateCS" />
+    
+    <bpmn2:sequenceFlow id="_5-_6" sourceRef="Task_CalculateCS" targetRef="endEvent" />
+    
+  </bpmn2:process>
+  
+  <!-- ============================================ -->
+  <!-- ERROR DEFINITIONS                           -->
+  <!-- ============================================ -->
+  <bpmn2:error id="Error_InvalidChildren" errorCode="InvalidChildren" name="Invalid Children Count" structureRef="_validationStatusItem" />
+  
+  <!-- ============================================ -->
+  <!-- BPMN DIAGRAM (Visual Layout)               -->
+  <!-- ============================================ -->
+  <bpmndi:BPMNDiagram id="BPMNDiagram_GuidelineCalculator">
+    <bpmndi:BPMNPlane bpmnElement="guidelinecalculator" id="BPMNPlane_GuidelineCalculator">
+      
+      <bpmndi:BPMNShape bpmnElement="startEvent" id="BPMNShape_startEvent">
+        <dc:Bounds x="50" y="100" width="30" height="30" />
+        <bpmndi:BPMNLabel id="BPMNLabel_startEvent">
+          <dc:Bounds x="25" y="135" width="80" height="15" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape bpmnElement="Task_EnterChildren" id="BPMNShape_Task_EnterChildren">
+        <dc:Bounds x="120" y="75" width="100" height="80" />
+        <bpmndi:BPMNLabel id="BPMNLabel_Task_EnterChildren">
+          <dc:Bounds x="130" y="110" width="80" height="15" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape bpmnElement="Gateway_ValidateChildren" id="BPMNShape_Gateway_ValidateChildren">
+        <dc:Bounds x="270" y="95" width="40" height="40" />
+        <bpmndi:BPMNLabel id="BPMNLabel_Gateway_ValidateChildren">
+          <dc:Bounds x="260" y="140" width="60" height="15" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape bpmnElement="Task_InputDependentInfo" id="BPMNShape_Task_InputDependentInfo">
+        <dc:Bounds x="360" y="75" width="100" height="80" />
+        <bpmndi:BPMNLabel id="BPMNLabel_Task_InputDependentInfo">
+          <dc:Bounds x="370" y="110" width="80" height="15" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape bpmnElement="Task_CalculateCS" id="BPMNShape_Task_CalculateCS">
+        <dc:Bounds x="510" y="75" width="100" height="80" />
+        <bpmndi:BPMNLabel id="BPMNLabel_Task_CalculateCS">
+          <dc:Bounds x="520" y="110" width="80" height="15" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape bpmnElement="endEvent" id="BPMNShape_endEvent">
+        <dc:Bounds x="660" y="100" width="30" height="30" />
+        <bpmndi:BPMNLabel id="BPMNLabel_endEvent">
+          <dc:Bounds x="630" y="135" width="90" height="15" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape bpmnElement="endEvent_Error" id="BPMNShape_endEvent_Error">
+        <dc:Bounds x="270" y="200" width="30" height="30" />
+        <bpmndi:BPMNLabel id="BPMNLabel_endEvent_Error">
+          <dc:Bounds x="240" y="235" width="90" height="15" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <!-- Sequence Flow Edges -->
+      <bpmndi:BPMNEdge bpmnElement="_1-_2" id="BPMNEdge__1-_2">
+        <di:waypoint x="80" y="115" />
+        <di:waypoint x="120" y="115" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge bpmnElement="_2-_3" id="BPMNEdge__2-_3">
+        <di:waypoint x="220" y="115" />
+        <di:waypoint x="270" y="115" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge bpmnElement="_3-_4" id="BPMNEdge__3-_4">
+        <di:waypoint x="310" y="115" />
+        <di:waypoint x="360" y="115" />
+        <bpmndi:BPMNLabel id="BPMNLabel__3-_4">
+          <dc:Bounds x="325" y="100" width="30" height="15" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge bpmnElement="_3-_Error" id="BPMNEdge__3-_Error">
+        <di:waypoint x="290" y="135" />
+        <di:waypoint x="285" y="200" />
+        <bpmndi:BPMNLabel id="BPMNLabel__3-_Error">
+          <dc:Bounds x="260" y="165" width="35" height="15" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge bpmnElement="_4-_5" id="BPMNEdge__4-_5">
+        <di:waypoint x="460" y="115" />
+        <di:waypoint x="510" y="115" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge bpmnElement="_5-_6" id="BPMNEdge__5-_6">
+        <di:waypoint x="610" y="115" />
+        <di:waypoint x="660" y="115" />
+      </bpmndi:BPMNEdge>
+      
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+  
+</bpmn2:definitions>

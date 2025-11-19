@@ -1,0 +1,68 @@
+{
+  "dcss-children-form": {
+    "name": "Children Count Form",
+    "description": "Form for entering the number of children for child support calculation",
+    "model": "guidelinecalculator",
+    "process": "guidelinecalculator",
+    "task": "Task_EnterChildren",
+    "fields": [
+      {
+        "name": "childrenCount",
+        "type": "integer",
+        "label": "Number of Common Children",
+        "required": true,
+        "min": 1,
+        "max": 20
+      }
+    ]
+  },
+  "dcss-dependent-form": {
+    "name": "Dependent Information Form",
+    "description": "Form for entering parent income and dependent information",
+    "model": "guidelinecalculator",
+    "process": "guidelinecalculator",
+    "task": "Task_InputDependentInfo",
+    "fields": [
+      {
+        "name": "parentA_GrossIncome",
+        "type": "decimal",
+        "label": "Parent A Gross Monthly Income",
+        "required": true
+      },
+      {
+        "name": "parentB_GrossIncome",
+        "type": "decimal",
+        "label": "Parent B Gross Monthly Income",
+        "required": true
+      },
+      {
+        "name": "custodyPercentageHigh",
+        "type": "decimal",
+        "label": "Custody Percentage (Parent A)",
+        "required": true,
+        "min": 0.01,
+        "max": 0.99
+      },
+      {
+        "name": "dependentInfo",
+        "type": "object",
+        "label": "Dependent Information",
+        "properties": {
+          "dependents": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "dependentName": {"type": "string", "required": true},
+                "dateOfBirth": {"type": "string", "format": "date", "required": true},
+                "relationship": {"type": "string", "enum": ["child", "stepchild", "adopted"]},
+                "overnightPercentage": {"type": "decimal", "minimum": 0, "maximum": 100},
+                "monthlyHealthPremium": {"type": "decimal", "minimum": 0}
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}

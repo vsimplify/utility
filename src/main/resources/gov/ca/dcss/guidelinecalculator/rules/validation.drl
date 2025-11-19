@@ -1,0 +1,55 @@
+package gov.ca.dcss.guidelinecalculator.rules;
+
+import gov.ca.dcss.guidelinecalculator.model.DependentInfo;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+rule "Validate Children Count"
+    when
+        childrenCount: Integer(this < 0 || this > 10)
+    then
+        throw new RuntimeException("Number of children must be between 0 and 10");
+end
+
+rule "Validate Dependent Info - Required Fields"
+    when
+        dependent: DependentInfo(
+            dependentName == null || dependentName.trim().isEmpty() ||
+            dateOfBirth == null || dateOfBirth.trim().isEmpty() ||
+            relationship == null || relationship.trim().isEmpty()
+        )
+    then
+        throw new RuntimeException("Dependent name, date of birth, and relationship are required fields");
+end
+
+rule "Validate Dependent Info - Date of Birth"
+    when
+        dependent: DependentInfo(dateOfBirth != null)
+    then
+        try {
+            LocalDate dob = LocalDate.parse(dependent.getDateOfBirth(), DateTimeFormatter.ISO_DATE);
+            LocalDate now = LocalDate.now();
+            if (dob.isAfter(now)) {
+                throw new RuntimeException("Date of birth cannot be in the future");
+            }
+            if (dob.isBefore(now.minusYears(18))) {
+                throw new RuntimeException("Dependent must be under 18 years old");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Invalid date format. Please use YYYY-MM-DD format");
+        }
+end
+
+rule "Validate Dependent Info - Overnight Percentage"
+    when
+        dependent: DependentInfo(overnightPercentage < 0 || overnightPercentage > 100)
+    then
+        throw new RuntimeException("Overnight percentage must be between 0 and 100");
+end
+
+rule "Validate Dependent Info - Monthly Health Premium"
+    when
+        dependent: DependentInfo(monthlyHealthPremium < 0)
+    then
+        throw new RuntimeException("Monthly health premium cannot be negative");
+end

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>California Child Support Calculator - Children Count</title>
+
+    <!-- PatternFly CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@patternfly/patternfly@5.1.0/patternfly.css">
+
+    <!-- React Dependencies (CDN) -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+
+    <!-- PatternFly React Components (CDN) -->
+    <script src="https://unpkg.com/@patternfly/react-core@5.1.1/dist/umd/patternfly-react-core.js"></script>
+
+    <style>
+        body {
+            background: #f0f0f0;
+            font-family: 'Red Hat Text', sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <!-- Load compiled TypeScript component -->
+    <script src="/js/dcss-children-form.js"></script>
+
+    <script>
+        // Get URL parameters for process context
+        const urlParams = new URLSearchParams(window.location.search);
+        const processInstanceId = urlParams.get('processInstanceId') || 'test-process-123';
+        const taskId = urlParams.get('taskId') || 'test-task-123';
+
+        // Render the TypeScript component
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(
+            React.createElement(window.DcssChildrenForm.default || window.DcssChildrenForm, {
+                processInstanceId: processInstanceId,
+                taskId: taskId
+            })
+        );
+    </script>
+</body>
+</html>
