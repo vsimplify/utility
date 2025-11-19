@@ -108,7 +108,7 @@ Write-Step "Configuring Maven settings.xml..."
 
 $SETTINGS_FILE = "$M2_DIR\settings.xml"
 
-$SettingsXml = @"
+$SettingsXml = @'
 <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
@@ -146,7 +146,7 @@ $SettingsXml = @"
     <activeProfile>ibm-bamoe-enterprise-maven-repository</activeProfile>
   </activeProfiles>
 </settings>
-"@
+'@
 
 try {
     $SettingsXml | Out-File -FilePath $SETTINGS_FILE -Encoding UTF8 -Force
