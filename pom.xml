@@ -32,6 +32,7 @@
       <dependency>
         <groupId>com.ibm.bamoe</groupId>
         <artifactId>bamoe-quarkus-devui</artifactId>
+        <version>9.3.0-ibm-0007</version>
       </dependency>
       <dependency>
         <groupId>com.ibm.bamoe</groupId>
