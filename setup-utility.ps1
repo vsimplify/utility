@@ -108,7 +108,7 @@ Write-Step "Configuring Maven settings.xml..."
 
 $SETTINGS_FILE = "$M2_DIR\settings.xml"
 
-$SettingsXml = @'
+$SettingsXml = @"
 <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
@@ -119,7 +119,7 @@ $SettingsXml = @'
       <repositories>
         <repository>
           <id>ibm-bamoe-enterprise-maven-repository</id>
-          <url>file:///${user.home}/.m2/repository/$BAMOE_REPO_NAME</url>
+          <url>file:///$env:USERPROFILE/.m2/repository/$BAMOE_REPO_NAME</url>
           <releases>
             <enabled>true</enabled>
           </releases>
@@ -131,7 +131,7 @@ $SettingsXml = @'
       <pluginRepositories>
         <pluginRepository>
           <id>ibm-bamoe-enterprise-maven-repository</id>
-          <url>file:///${user.home}/.m2/repository/$BAMOE_REPO_NAME</url>
+          <url>file:///$env:USERPROFILE/.m2/repository/$BAMOE_REPO_NAME</url>
           <releases>
             <enabled>true</enabled>
           </releases>
@@ -146,7 +146,7 @@ $SettingsXml = @'
     <activeProfile>ibm-bamoe-enterprise-maven-repository</activeProfile>
   </activeProfiles>
 </settings>
-'@
+"@
 
 try {
     $SettingsXml | Out-File -FilePath $SETTINGS_FILE -Encoding UTF8 -Force
