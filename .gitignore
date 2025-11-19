@@ -1,5 +1,80 @@
+# Build artifacts and temporary files
 target/
 **/target/
 *.class
 *.jar
+*.war
+*.ear
+
+# macOS resource fork files
 *._*
+._*
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Logs
+*.log
+logs/
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+
+# Dependency directories
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# dotenv environment variables file
+.env
+
+# Build outputs (but keep source)
+dist/
+build/
+
+# Maven wrapper properties (keep the scripts)
+.mvn/wrapper/maven-wrapper.jar
+
+# Keep all source code and documentation
+!src/
+!docs/
+!README.md
+!.gitignore
+!pom.xml
+!package.json
+!tsconfig.json
+!webpack.config.js
+!setup-windows.bat
+!mvnw
+!mvnw.cmd

@@ -1,6 +1,13 @@
-# DCSS Guideline Calculator Forms Utility
+# DCSS Guideline Calculator Forms MVP
 
 A streamlined BAMOE 9.3.x compatible forms application for California Child Support Guideline calculations.
+## Nugget
+
+- BAMOE 9.3.x compatible React forms with PatternFly 5.x
+- TypeScript components for children count and dependent info
+- Complete build system (webpack + Maven)
+- Windows-optimized setup scripts
+- Pre-compiled assets for immediate deployment"
 
 ## 🚀 Quick Start (Windows)
 
