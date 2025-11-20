@@ -2,8 +2,8 @@ const path = require('path');
 
 module.exports = {
   entry: {
-    'dcss-children-form': './src/main/typescript/forms/DcssChildrenForm.tsx',
-    'dcss-dependent-form': './src/main/typescript/forms/DcssDependentForm.tsx'
+    'DcssChildrenForm': './src/main/typescript/forms/DcssChildrenForm.tsx',
+    'DcssDependentForm': './src/main/typescript/forms/DcssDependentForm.tsx'
   },
   output: {
     path: path.resolve(__dirname, 'target/classes/META-INF/resources/js'),

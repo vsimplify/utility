@@ -20,35 +20,13 @@
   </properties>
   <dependencyManagement>
     <dependencies>
-      <!-- https://www.ibm.com/docs/en/ibamoe/9.3.0?topic=upgrading-from-92x-->
+      <!-- BAMOE BOM -->
       <dependency>
         <groupId>com.ibm.bamoe</groupId>
         <artifactId>bamoe-bom</artifactId>
         <version>9.3.0-ibm-0007</version>
         <type>pom</type>
         <scope>import</scope>
-      </dependency>
-      <!-- BAMOE Dev UI for form management -->
-      <dependency>
-        <groupId>com.ibm.bamoe</groupId>
-        <artifactId>bamoe-quarkus-devui</artifactId>
-        <version>9.3.0-ibm-0007</version>
-      </dependency>
-      <dependency>
-        <groupId>org.kie</groupId>
-        <artifactId>kie-addons-quarkus-source-files</artifactId>
-      </dependency>
-      <dependency>
-        <groupId>com.ibm.bamoe</groupId>
-        <artifactId>kogito-quarkus-processes</artifactId>
-      </dependency>
-      <dependency>
-        <groupId>com.ibm.bamoe</groupId>
-        <artifactId>kogito-addons-quarkus-process-management</artifactId>
-      </dependency>
-      <dependency>
-        <groupId>com.ibm.bamoe</groupId>
-        <artifactId>kogito-addons-quarkus-persistence-jdbc</artifactId>
       </dependency>
       <dependency>
         <groupId>${quarkus.platform.group-id}</groupId>
@@ -61,6 +39,46 @@
   </dependencyManagement>
 
   <dependencies>
+    <!-- BAMOE ILMT Compliance -->
+    <dependency>
+      <groupId>com.ibm.bamoe</groupId>
+      <artifactId>bamoe-ilmt-compliance-quarkus-dmoe</artifactId>
+    </dependency>
+    <!-- BAMOE Dev UI -->
+    <dependency>
+      <groupId>com.ibm.bamoe</groupId>
+      <artifactId>bamoe-quarkus-devui</artifactId>
+    </dependency>
+    
+    <!-- Drools Decisions (DMN) -->
+    <dependency>
+      <groupId>org.drools</groupId>
+      <artifactId>drools-quarkus-decisions</artifactId>
+    </dependency>
+    <!-- Drools Rules (DRL) -->
+    <dependency>
+      <groupId>org.drools</groupId>
+      <artifactId>drools-quarkus-rules</artifactId>
+    </dependency>
+    <!-- jBPM Processes (BPMN) -->
+    <dependency>
+      <groupId>org.jbpm</groupId>
+      <artifactId>jbpm-quarkus</artifactId>
+    </dependency>
+    
+    <!-- Kogito Addons -->
+    <dependency>
+      <groupId>org.kie</groupId>
+      <artifactId>kie-addons-quarkus-source-files</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.kie</groupId>
+      <artifactId>kie-addons-quarkus-process-management</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.kie</groupId>
+      <artifactId>kie-addons-quarkus-persistence-jdbc</artifactId>
+    </dependency>
 
     <!-- MySQL Persistence -->
     <dependency>
@@ -93,27 +111,6 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-smallrye-health</artifactId>
     </dependency>
-    <!-- Drools -->
-    <dependency>
-      <groupId>org.drools</groupId>
-      <artifactId>drools-core</artifactId>
-      <version>8.44.0.Final</version>
-    </dependency>
-    <dependency>
-      <groupId>org.drools</groupId>
-      <artifactId>drools-compiler</artifactId>
-      <version>8.44.0.Final</version>
-    </dependency>
-    <dependency>
-      <groupId>org.kie</groupId>
-      <artifactId>kie-dmn-api</artifactId>
-      <version>8.44.0.Final</version>
-    </dependency>
-    <dependency>
-      <groupId>org.kie</groupId>
-      <artifactId>kie-dmn-core</artifactId>
-      <version>8.44.0.Final</version>
-    </dependency>
 
     <!-- tests -->
     <dependency>
@@ -133,18 +130,32 @@
     <resources>
       <resource>
         <directory>src/main/resources</directory>
+        <excludes>
+          <exclude>**/_*</exclude>
+          <exclude>**/._*</exclude>
+        </excludes>
       </resource>
     </resources>
     <plugins>
+      <!-- Clean macOS metadata files after resources phase -->
       <plugin>
-        <groupId>${quarkus.platform.group-id}</groupId>
-        <artifactId>quarkus-maven-plugin</artifactId>
-        <version>${quarkus-plugin.version}</version>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>3.1.0</version>
         <executions>
           <execution>
+            <id>clean-macos-metadata</id>
+            <phase>prepare-package</phase>
             <goals>
-              <goal>build</goal>
+              <goal>run</goal>
             </goals>
+            <configuration>
+              <target>
+                <delete>
+                  <fileset dir="${project.build.outputDirectory}" includes="**/._*,**/.DS_Store"/>
+                </delete>
+              </target>
+            </configuration>
           </execution>
         </executions>
       </plugin>
