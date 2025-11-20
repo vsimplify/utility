@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="TimeshareSelection" name="TimeshareSelection" namespace="https://kiegroup.org/dmn/_A4BCA8B8-CF08-433F-93B3-8B632D6B48F5">
+  <inputData id="_StandardVisitation" name="Standard Visitation Days">
+    <variable id="_StandardVisitationVar" name="Standard Visitation Days" typeRef="number"/>
+  </inputData>
+  <inputData id="_Holidays" name="Holidays Days">
+    <variable id="_HolidaysVar" name="Holidays Days" typeRef="number"/>
+  </inputData>
+  <inputData id="_Vacations" name="Vacation Days">
+    <variable id="_VacationsVar" name="Vacation Days" typeRef="number"/>
+  </inputData>
+  <decision id="_TimeshareCalculation" name="Timeshare Percentage">
+    <variable id="_TimeshareCalculationVar" name="Timeshare Percentage" typeRef="number"/>
+    <informationRequirement id="_InfoReq_Standard">
+      <requiredInput href="#_StandardVisitation"/>
+    </informationRequirement>
+    <informationRequirement id="_InfoReq_Holidays">
+      <requiredInput href="#_Holidays"/>
+    </informationRequirement>
+    <informationRequirement id="_InfoReq_Vacations">
+      <requiredInput href="#_Vacations"/>
+    </informationRequirement>
+    <literalExpression id="_Expression_Timeshare">
+      <text>(Standard Visitation Days + Holidays Days + Vacation Days) / 365 * 100</text>
+    </literalExpression>
+  </decision>
+</definitions>

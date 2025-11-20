@@ -24,7 +24,7 @@
       <dependency>
         <groupId>com.ibm.bamoe</groupId>
         <artifactId>bamoe-bom</artifactId>
-        <version>9.3.0-ibm-0007</version>
+        <version>9.2.0-ibm-0004</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -32,7 +32,11 @@
       <dependency>
         <groupId>com.ibm.bamoe</groupId>
         <artifactId>bamoe-quarkus-devui</artifactId>
-        <version>9.3.0-ibm-0007</version>
+        <version>9.2.0-ibm-0004</version>
+      </dependency>
+      <dependency>
+        <groupId>org.kie</groupId>
+        <artifactId>kie-addons-quarkus-source-files</artifactId>
       </dependency>
       <dependency>
         <groupId>com.ibm.bamoe</groupId>

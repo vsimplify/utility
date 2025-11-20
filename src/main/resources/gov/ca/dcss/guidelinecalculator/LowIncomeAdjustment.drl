@@ -1,0 +1,13 @@
+package gov.ca.dcss.guidelinecalculator;
+
+import gov.ca.dcss.guidelinecalculator.model.DependentInfo;
+
+rule "Low Income Adjustment Check"
+ruleflow-group "low-income-adjustment"
+when
+    $netIncome : Double( this < 1500.0 ) from $netDisposableIncomeTotal
+then
+    System.out.println("Low Income Adjustment Applies. Net Income: " + $netIncome);
+    // In a real scenario, we would set a flag or adjust the calculation
+    // kcontext.setVariable("liaEligible", true);
+end
