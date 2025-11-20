@@ -34,4 +34,4 @@ echo.
 echo Press Ctrl+C to stop the application
 echo.
 
-call mvnw.cmd quarkus:dev
+call mvn quarkus:dev

@@ -237,3 +237,30 @@ npm run build
 ---
 
 **The utility repository streamlines the `docs/compile` process by pre-applying all code fixes, making Windows setup much simpler!** 🎉
+
+## 💻 Command Reference (Cheatsheet)
+
+For manual execution or troubleshooting, here are the individual commands required to build the project components.
+
+### 1. Build React Forms
+**Required whenever you change `.tsx` files.**
+```cmd
+npm install
+npm run build
+```
+*Note: This compiles TypeScript forms in `src/main/resources/custom-forms-dev` into JavaScript in `src/main/resources/META-INF/resources/js`.*
+
+### 2. Build Java Application
+**Required whenever you change `.java`, `.bpmn`, `.dmn`, or `.drl` files.**
+```cmd
+mvn clean install
+```
+
+### 3. Run Application
+```cmd
+mvn quarkus:dev
+```
+
+### ⚡ Shortcuts
+- **`setup-utility.bat`**: Runs ALL of the above (Setup Repo + Build Forms + Build App). Use for first-time setup.
+- **`setup-windows.bat`**: Runs `npm install` + `npm run build` + `mvn quarkus:dev`. Use for daily development.
