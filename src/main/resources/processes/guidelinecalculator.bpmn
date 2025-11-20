@@ -359,12 +359,12 @@
       
       <!-- Service Task: Calculate CS Shape -->
       <bpmndi:BPMNShape bpmnElement="Task_CalculateCS" id="BPMNShape_Task_CalculateCS">
-        <dc:Bounds x="570" y="75" width="100" height="80" />
+        <dc:Bounds x="870" y="75" width="100" height="80" />
       </bpmndi:BPMNShape>
       
       <!-- End Event: Success Shape -->
       <bpmndi:BPMNShape bpmnElement="endEvent" id="BPMNShape_endEvent">
-        <dc:Bounds x="720" y="100" width="30" height="30" />
+        <dc:Bounds x="1020" y="100" width="30" height="30" />
       </bpmndi:BPMNShape>
       
       <!-- End Event: Error Shape -->
@@ -397,10 +397,18 @@
         <di:waypoint x="520" y="115" />
         <di:waypoint x="570" y="115" />
       </bpmndi:BPMNEdge>
-      
-      <bpmndi:BPMNEdge bpmnElement="_5-_6" id="BPMNEdge__5-_6">
+      <bpmndi:BPMNEdge bpmnElement="_Timeshare-_LIA" id="BPMNEdge__Timeshare-_LIA">
         <di:waypoint x="670" y="115" />
         <di:waypoint x="720" y="115" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_LIA-_Calculate" id="BPMNEdge__LIA-_Calculate">
+        <di:waypoint x="820" y="115" />
+        <di:waypoint x="870" y="115" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge bpmnElement="_5-_6" id="BPMNEdge__5-_6">
+        <di:waypoint x="970" y="115" />
+        <di:waypoint x="1020" y="115" />
       </bpmndi:BPMNEdge>
       
     </bpmndi:BPMNPlane>
@@ -630,6 +638,50 @@
         <bpmn2:targetRef>custodyPercentageHigh</bpmn2:targetRef>
       </bpmn2:dataOutputAssociation>
     </bpmn2:userTask>
+
+    <!-- Business Rule Task: Timeshare Selection (DMN) -->
+    <bpmn2:businessRuleTask id="Task_Timeshare" name="Determine Timeshare" implementation="http://www.kiegroup.org/dmn">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue>Determine Timeshare</drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>_4-_5</bpmn2:incoming>
+      <bpmn2:outgoing>_Timeshare-_LIA</bpmn2:outgoing>
+      <bpmn2:ioSpecification id="IOSpec_Timeshare">
+        <bpmn2:dataInput id="Input_Timeshare_Namespace" name="Namespace" drools:dtype="String"/>
+        <bpmn2:dataInput id="Input_Timeshare_Model" name="Model" drools:dtype="String"/>
+        <bpmn2:inputSet id="InputSet_Timeshare">
+          <bpmn2:dataInputRefs>Input_Timeshare_Namespace</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>Input_Timeshare_Model</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation>
+        <bpmn2:targetRef>Input_Timeshare_Namespace</bpmn2:targetRef>
+        <bpmn2:assignment>
+          <bpmn2:from xsi:type="bpmn2:tFormalExpression">https://kiegroup.org/dmn/_A4BCA8B8-CF08-433F-93B3-8B632D6B48F5</bpmn2:from>
+          <bpmn2:to xsi:type="bpmn2:tFormalExpression">Input_Timeshare_Namespace</bpmn2:to>
+        </bpmn2:assignment>
+      </bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation>
+        <bpmn2:targetRef>Input_Timeshare_Model</bpmn2:targetRef>
+        <bpmn2:assignment>
+          <bpmn2:from xsi:type="bpmn2:tFormalExpression">TimeshareSelection</bpmn2:from>
+          <bpmn2:to xsi:type="bpmn2:tFormalExpression">Input_Timeshare_Model</bpmn2:to>
+        </bpmn2:assignment>
+      </bpmn2:dataInputAssociation>
+    </bpmn2:businessRuleTask>
+
+    <!-- Business Rule Task: Low Income Adjustment (DRL) -->
+    <bpmn2:businessRuleTask id="Task_LIA" name="Check Low Income Adjustment" drools:ruleFlowGroup="low-income-adjustment">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue>Check Low Income Adjustment</drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>_Timeshare-_LIA</bpmn2:incoming>
+      <bpmn2:outgoing>_LIA-_Calculate</bpmn2:outgoing>
+    </bpmn2:businessRuleTask>
     
     <!-- ============================================ -->
     <!-- SERVICE TASK: CALCULATE CHILD SUPPORT       -->
@@ -649,7 +701,7 @@
           <drools:script>System.out.println("Starting CS calculation for process: " + kcontext.getProcessInstance().getId() + " Children: " + kcontext.getVariable("childrenCount"));</drools:script>
         </drools:onEntry-script>
       </bpmn2:extensionElements>
-      <bpmn2:incoming>_4-_5</bpmn2:incoming>
+      <bpmn2:incoming>_LIA-_Calculate</bpmn2:incoming>
       <bpmn2:outgoing>_5-_6</bpmn2:outgoing>
       
       <!-- IO Specification -->
@@ -771,7 +823,9 @@
       <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression" language="http://www.java.com/java">return childrenCount == null || childrenCount &lt; 1 || childrenCount &gt; 20;</bpmn2:conditionExpression>
     </bpmn2:sequenceFlow>
     
-    <bpmn2:sequenceFlow id="_4-_5" sourceRef="Task_InputDependentInfo" targetRef="Task_CalculateCS" />
+    <bpmn2:sequenceFlow id="_4-_5" sourceRef="Task_InputDependentInfo" targetRef="Task_Timeshare" />
+    <bpmn2:sequenceFlow id="_Timeshare-_LIA" sourceRef="Task_Timeshare" targetRef="Task_LIA" />
+    <bpmn2:sequenceFlow id="_LIA-_Calculate" sourceRef="Task_LIA" targetRef="Task_CalculateCS" />
     
     <bpmn2:sequenceFlow id="_5-_6" sourceRef="Task_CalculateCS" targetRef="endEvent" />
     
