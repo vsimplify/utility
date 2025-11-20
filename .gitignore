@@ -1,4 +1,39 @@
+# macOS metadata
 ._*
 .DS_Store
 **/._*
 **/.DS_Store
+
+# Build outputs
+target/
+dist/
+build/
+*.class
+*.jar
+*.war
+*.ear
+
+# Node.js dependencies and outputs
+node_modules/
+package-lock.json
+
+# Compiled JavaScript from TypeScript (generated files)
+src/main/resources/META-INF/resources/js/*.js
+src/main/resources/META-INF/resources/js/*.js.map
+
+# Logs
+*.log
+build.log
+logs/
+
+# IDE files
+.idea/
+.vscode/
+.settings/
+.project
+.classpath
+*.iml
+.obsidian/
+
+# Maven wrapper
+.mvn/wrapper/maven-wrapper.jar
