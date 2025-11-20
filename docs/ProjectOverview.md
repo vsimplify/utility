@@ -6,11 +6,11 @@ The Guideline Calculator is a BAMOE 9.3 business application designed to calcula
 ## 2. Architecture
 ```mermaid
 graph TD
-    User[User] -->|Interacts| UI[React Forms (PatternFly)]
+    User[User] -->|Interacts| UI[React Forms PatternFly]
     UI -->|Submits Data| Process[BPMN Process]
-    Process -->|Invokes| DMN[Timeshare Selection (DMN)]
-    Process -->|Invokes| DRL[Low Income Adjustment (DRL)]
-    Process -->|Invokes| Service[Calculation Service (Java)]
+    Process -->|Invokes| DMN[Timeshare Selection DMN]
+    Process -->|Invokes| DRL[Low Income Adjustment DRL]
+    Process -->|Invokes| Service[Calculation Service Java]
     Process -->|Persists| DB[(Database)]
 ```
 

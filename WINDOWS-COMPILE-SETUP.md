@@ -114,14 +114,14 @@ npm run build
 
 ```bash
 # Clean and build (same as docs/compile)
-mvnw.cmd clean install
+mvn clean install
 ```
 
 ### Step 6: Run Application
 
 ```bash
 # Start the application
-mvnw.cmd quarkus:dev
+mvn quarkus:dev
 ```
 
 ## 🔄 Key Differences: Utility Repo vs Original docs/compile
@@ -194,9 +194,9 @@ After successful setup:
 mvn help:effective-settings
 
 # Clean and retry
-mvnw.cmd clean
+mvn clean
 npm run build
-mvnw.cmd install
+mvn install
 ```
 
 ### Repository Issues
@@ -226,12 +226,12 @@ npm run build
 
 3. **Test Maven:**
    ```cmd
-   mvnw.cmd clean compile
+   mvn clean compile
    ```
 
 4. **Run application:**
    ```cmd
-   mvnw.cmd quarkus:dev
+   mvn quarkus:dev
    ```
 
 ---
