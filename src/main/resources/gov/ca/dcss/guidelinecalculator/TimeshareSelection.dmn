@@ -24,4 +24,32 @@
       <text>(Standard Visitation Days + Holidays Days + Vacation Days) / 365 * 100</text>
     </literalExpression>
   </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="_TimeshareSelection_D1">
+      <dmndi:DMNShape id="_StandardVisitation_s1" dmnElementRef="_StandardVisitation">
+        <dc:Bounds x="150" y="100" width="150" height="50"/>
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="_Holidays_s1" dmnElementRef="_Holidays">
+        <dc:Bounds x="350" y="100" width="150" height="50"/>
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="_Vacations_s1" dmnElementRef="_Vacations">
+        <dc:Bounds x="550" y="100" width="150" height="50"/>
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="_TimeshareCalculation_s1" dmnElementRef="_TimeshareCalculation">
+        <dc:Bounds x="350" y="250" width="150" height="50"/>
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="_InfoReq_Standard_e1" dmnElementRef="_InfoReq_Standard">
+        <di:waypoint x="225" y="150"/>
+        <di:waypoint x="425" y="250"/>
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="_InfoReq_Holidays_e1" dmnElementRef="_InfoReq_Holidays">
+        <di:waypoint x="425" y="150"/>
+        <di:waypoint x="425" y="250"/>
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="_InfoReq_Vacations_e1" dmnElementRef="_InfoReq_Vacations">
+        <di:waypoint x="625" y="150"/>
+        <di:waypoint x="425" y="250"/>
+      </dmndi:DMNEdge>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
 </definitions>
