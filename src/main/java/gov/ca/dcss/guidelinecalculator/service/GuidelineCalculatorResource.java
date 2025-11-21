@@ -3,6 +3,7 @@ package gov.ca.dcss.guidelinecalculator.service;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import gov.ca.dcss.guidelinecalculator.model.ChildrenCountRequest;
 import gov.ca.dcss.guidelinecalculator.model.DependentInfo;
 
 @Path("/api/guideline-calculator")
@@ -12,8 +13,9 @@ public class GuidelineCalculatorResource {
 
     @POST
     @Path("/children-count")
-    public Response validateChildrenCount(int count) {
+    public Response validateChildrenCount(ChildrenCountRequest request) {
         try {
+            int count = request.getChildrenCount();
             // Basic validation implemented here; rule engine integration is planned for later iterations
             if (count < 0 || count > 10) {
                 throw new IllegalArgumentException("childrenCount must be between 0 and 10");
