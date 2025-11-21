@@ -137,7 +137,72 @@
       </resource>
     </resources>
     <plugins>
-      <!-- Clean macOS metadata files after resources phase -->
+      <!-- Clean mac metadata files after resources phase -->
+      <plugin>
+        <artifactId>maven-clean-plugin</artifactId>
+        <version>3.3.2</version>
+        <configuration>
+          <filesets>
+            <fileset>
+              <directory>${project.build.outputDirectory}</directory>
+              <includes>
+                <include>**/._*</include>
+                <include>**/.DS_Store</include>
+              </includes>
+            </fileset>
+          </filesets>
+        </configuration>
+        <executions>
+          <execution>
+            <id>remove-mac-metadata</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>clean</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Frontend Maven Plugin to build React app -->
+      <plugin>
+        <groupId>com.github.eirslett</groupId>
+        <artifactId>frontend-maven-plugin</artifactId>
+        <version>1.15.0</version>
+        <configuration>
+          <workingDirectory>${project.basedir}</workingDirectory>
+          <installDirectory>${project.build.directory}</installDirectory>
+        </configuration>
+        <executions>
+          <execution>
+            <id>install node and npm</id>
+            <goals>
+              <goal>install-node-and-npm</goal>
+            </goals>
+            <configuration>
+              <nodeVersion>v20.10.0</nodeVersion>
+              <npmVersion>10.2.3</npmVersion>
+            </configuration>
+          </execution>
+          <execution>
+            <id>npm install</id>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+            <configuration>
+              <arguments>install</arguments>
+            </configuration>
+          </execution>
+          <execution>
+            <id>npm run build</id>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+            <configuration>
+              <arguments>run build</arguments>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
 
       <!-- Standard Quarkus Maven Plugin -->
       <plugin>
