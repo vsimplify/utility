@@ -137,47 +137,7 @@
       </resource>
     </resources>
     <plugins>
-      <!-- Clean mac metadata files after resources phase -->
-      <plugin>
-        <artifactId>maven-clean-plugin</artifactId>
-        <version>3.3.2</version>
-        <configuration>
-          <excludeDefaultDirectories>true</excludeDefaultDirectories>
-          <filesets>
-            <fileset>
-              <directory>${project.build.outputDirectory}</directory>
-              <includes>
-                <include>**/._*</include>
-                <include>**/.DS_Store</include>
-              </includes>
-            </fileset>
-          </filesets>
-        </configuration>
-        <executions>
-          <execution>
-            <id>remove-mac-metadata</id>
-            <phase>prepare-package</phase>
-            <goals>
-              <goal>clean</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>clean-node-tmp</id>
-            <phase>initialize</phase>
-            <goals>
-              <goal>clean</goal>
-            </goals>
-            <configuration>
-              <filesets>
-                <fileset>
-                  <directory>${project.build.directory}/node</directory>
-                  <followSymlinks>false</followSymlinks>
-                </fileset>
-              </filesets>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
+
 
       <!-- Frontend Maven Plugin to build React app -->
       <plugin>
