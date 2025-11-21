@@ -4,13 +4,7 @@ echo DCSS Guideline Calculator Forms Setup
 echo ========================================
 echo.
 
-echo Step 1: Cleaning previous builds...
-call npm run clean
-if %errorlevel% neq 0 (
-    echo WARNING: Clean failed or nothing to clean. Continuing...
-)
-
-echo Step 2: Installing Node.js dependencies...
+echo Step 1: Installing Node.js dependencies...
 call npm install
 if %errorlevel% neq 0 (
     echo ERROR: npm install failed
@@ -20,7 +14,13 @@ if %errorlevel% neq 0 (
 echo ✓ Node.js dependencies installed
 echo.
 
-echo Step 2: Building forms...
+echo Step 2: Cleaning previous builds...
+call npm run clean
+if %errorlevel% neq 0 (
+    echo WARNING: Clean failed. Continuing...
+)
+
+echo Step 3: Building forms...
 call npm run build
 if %errorlevel% neq 0 (
     echo ERROR: npm run build failed
