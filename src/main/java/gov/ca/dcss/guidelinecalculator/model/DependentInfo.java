@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import java.util.List;
 
-import jakarta.enterprise.context.Dependent;
+
 
 
 public class DependentInfo implements Serializable {

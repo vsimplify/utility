@@ -1,6 +1,7 @@
 package gov.ca.dcss.guidelinecalculator.rules;
 
 import gov.ca.dcss.guidelinecalculator.model.DependentInfo;
+import gov.ca.dcss.guidelinecalculator.model.Dependent;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -13,21 +14,23 @@ end
 
 rule "Validate Dependent Info - Required Fields"
     when
-        dependent: DependentInfo(
+        $info: DependentInfo( $dependents: dependents )
+        $dep: Dependent(
             dependentName == null || dependentName.trim().isEmpty() ||
             dateOfBirth == null || dateOfBirth.trim().isEmpty() ||
             relationship == null || relationship.trim().isEmpty()
-        )
+        ) from $dependents
     then
         throw new RuntimeException("Dependent name, date of birth, and relationship are required fields");
 end
 
 rule "Validate Dependent Info - Date of Birth"
     when
-        dependent: DependentInfo(dateOfBirth != null)
+        $info: DependentInfo( $dependents: dependents )
+        $dep: Dependent( dateOfBirth != null ) from $dependents
     then
         try {
-            LocalDate dob = LocalDate.parse(dependent.getDateOfBirth(), DateTimeFormatter.ISO_DATE);
+            LocalDate dob = LocalDate.parse($dep.getDateOfBirth(), DateTimeFormatter.ISO_DATE);
             LocalDate now = LocalDate.now();
             if (dob.isAfter(now)) {
                 throw new RuntimeException("Date of birth cannot be in the future");
@@ -42,14 +45,16 @@ end
 
 rule "Validate Dependent Info - Overnight Percentage"
     when
-        dependent: DependentInfo(overnightPercentage < 0 || overnightPercentage > 100)
+        $info: DependentInfo( $dependents: dependents )
+        $dep: Dependent( overnightPercentage < 0 || overnightPercentage > 100 ) from $dependents
     then
         throw new RuntimeException("Overnight percentage must be between 0 and 100");
 end
 
 rule "Validate Dependent Info - Monthly Health Premium"
     when
-        dependent: DependentInfo(monthlyHealthPremium < 0)
+        $info: DependentInfo( $dependents: dependents )
+        $dep: Dependent( monthlyHealthPremium < 0 ) from $dependents
     then
         throw new RuntimeException("Monthly health premium cannot be negative");
 end

@@ -131,7 +131,6 @@
       <resource>
         <directory>src/main/resources</directory>
         <excludes>
-          <exclude>**/_*</exclude>
           <exclude>**/._*</exclude>
         </excludes>
       </resource>
@@ -145,14 +144,15 @@
         <executions>
           <execution>
             <id>clean-macos-metadata</id>
-            <phase>prepare-package</phase>
+            <phase>process-classes</phase>
             <goals>
               <goal>run</goal>
             </goals>
             <configuration>
               <target>
+                <echo message="Cleaning macOS metadata files from ${project.build.outputDirectory}"/>
                 <delete>
-                  <fileset dir="${project.build.outputDirectory}" includes="**/._*,**/.DS_Store"/>
+                  <fileset dir="${project.build.outputDirectory}" includes="**/._*,**/.DS_Store" defaultexcludes="no"/>
                 </delete>
               </target>
             </configuration>

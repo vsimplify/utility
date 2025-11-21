@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:bpsim="http://www.bpsim.org/schemas/1.0" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:drools="http://www.jboss.org/drools" id="GuidelineCalculator" targetNamespace="http://www.omg.org/bpmn20" expressionLanguage="http://www.mvel.org/2.0" typeLanguage="http://www.java.com/javaTypes">
-  <bpmn2:parsererror style="display: block; white-space: pre; border: 2px solid #c77; padding: 0 1em 0 1em; margin: 1em; background-color: #fdd; color: black">
-    <bpmn2:h3 />
-    <bpmn2:h3 />
-    <bpmn2:div style="font-family:monospace;font-size:12px" />
-  </bpmn2:parsererror>
   <bpmn2:error id="Error_InvalidChildren" errorCode="InvalidChildren" name="Invalid Children Count" structureRef="_validationStatusItem" />
   <bpmn2:itemDefinition id="_childrenCountItem" structureRef="Integer" />
   <bpmn2:itemDefinition id="_dependentInfoItem" structureRef="gov.ca.dcss.guidelinecalculator.model.DependentInfo" />
@@ -13,19 +8,22 @@
   <bpmn2:itemDefinition id="_custodyPercentageItem" structureRef="Double" />
   <bpmn2:itemDefinition id="_childSupportAmountItem" structureRef="Double" />
   <bpmn2:itemDefinition id="_validationStatusItem" structureRef="String" />
+  <bpmn2:interface id="_4-_5-_ServiceInterface" name="gov.ca.dcss.guidelinecalculator.service.CalculationService" implementationRef="gov.ca.dcss.guidelinecalculator.service.CalculationService">
+    <bpmn2:operation id="_4-_5-_ServiceOperation" name="calculate" implementationRef="calculate"/>
+  </bpmn2:interface>
   <bpmn2:process id="guidelinecalculator" name="CA Child Support Guideline Calculator" isExecutable="true" drools:packageName="gov.ca.dcss.guidelinecalculator" drools:version="1.0">
-    <bpmn2:property id="childrenCount" name="Children Count" itemSubjectRef="_childrenCountItem" />
-    <bpmn2:property id="dependentInfo" name="Dependent Information" itemSubjectRef="_dependentInfoItem" />
-    <bpmn2:property id="parentA_GrossIncome" name="Parent A Gross Income" itemSubjectRef="_parentAIncomeItem" />
-    <bpmn2:property id="parentB_GrossIncome" name="Parent B Gross Income" itemSubjectRef="_parentBIncomeItem" />
-    <bpmn2:property id="parentA_NetDisposableIncome" name="Parent A Net Disposable Income" itemSubjectRef="_parentAIncomeItem" />
-    <bpmn2:property id="parentB_NetDisposableIncome" name="Parent B Net Disposable Income" itemSubjectRef="_parentBIncomeItem" />
-    <bpmn2:property id="netDisposableIncomeTotal" name="Total Net Disposable Income" itemSubjectRef="_parentAIncomeItem" />
-    <bpmn2:property id="netDisposableIncomeHigh" name="Higher Net Disposable Income" itemSubjectRef="_parentAIncomeItem" />
-    <bpmn2:property id="custodyPercentageHigh" name="Higher Custody Percentage" itemSubjectRef="_custodyPercentageItem" />
-    <bpmn2:property id="kFactor" name="K Factor" itemSubjectRef="_custodyPercentageItem" />
-    <bpmn2:property id="childSupportAmount" name="Child Support Amount" itemSubjectRef="_childSupportAmountItem" />
-    <bpmn2:property id="validationStatus" name="Validation Status" itemSubjectRef="_validationStatusItem" />
+    <bpmn2:property id="childrenCount" name="childrenCount" itemSubjectRef="_childrenCountItem" />
+    <bpmn2:property id="dependentInfo" name="dependentInfo" itemSubjectRef="_dependentInfoItem" />
+    <bpmn2:property id="parentA_GrossIncome" name="parentA_GrossIncome" itemSubjectRef="_parentAIncomeItem" />
+    <bpmn2:property id="parentB_GrossIncome" name="parentB_GrossIncome" itemSubjectRef="_parentBIncomeItem" />
+    <bpmn2:property id="parentA_NetDisposableIncome" name="parentA_NetDisposableIncome" itemSubjectRef="_parentAIncomeItem" />
+    <bpmn2:property id="parentB_NetDisposableIncome" name="parentB_NetDisposableIncome" itemSubjectRef="_parentBIncomeItem" />
+    <bpmn2:property id="netDisposableIncomeTotal" name="netDisposableIncomeTotal" itemSubjectRef="_parentAIncomeItem" />
+    <bpmn2:property id="netDisposableIncomeHigh" name="netDisposableIncomeHigh" itemSubjectRef="_parentAIncomeItem" />
+    <bpmn2:property id="custodyPercentageHigh" name="custodyPercentageHigh" itemSubjectRef="_custodyPercentageItem" />
+    <bpmn2:property id="kFactor" name="kFactor" itemSubjectRef="_custodyPercentageItem" />
+    <bpmn2:property id="childSupportAmount" name="childSupportAmount" itemSubjectRef="_childSupportAmountItem" />
+    <bpmn2:property id="validationStatus" name="validationStatus" itemSubjectRef="_validationStatusItem" />
     <bpmn2:endEvent id="endEvent" name="Calculation Complete">
       <bpmn2:extensionElements>
         <drools:metaData name="elementname">
@@ -56,10 +54,10 @@
     <bpmn2:sequenceFlow id="_1-_2" sourceRef="startEvent" targetRef="Task_EnterChildren" />
     <bpmn2:sequenceFlow id="_2-_3" sourceRef="Task_EnterChildren" targetRef="Gateway_ValidateChildren" />
     <bpmn2:sequenceFlow id="_3-_4" name="Valid" sourceRef="Gateway_ValidateChildren" targetRef="Task_InputDependentInfo">
-      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression" language="http://www.java.com/java">return childrenCount != null &amp;&amp; childrenCount &gt;= 1 &amp;&amp; childrenCount &lt;= 20;</bpmn2:conditionExpression>
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression" language="http://www.java.com/java">Integer count = (Integer) kcontext.getVariable("childrenCount"); return count != null &amp;&amp; count &gt;= 1 &amp;&amp; count &lt;= 20;</bpmn2:conditionExpression>
     </bpmn2:sequenceFlow>
     <bpmn2:sequenceFlow id="_3-_Error" name="Invalid" sourceRef="Gateway_ValidateChildren" targetRef="endEvent_Error">
-      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression" language="http://www.java.com/java">return childrenCount == null || childrenCount &lt; 1 || childrenCount &gt; 20;</bpmn2:conditionExpression>
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression" language="http://www.java.com/java">Integer count = (Integer) kcontext.getVariable("childrenCount"); return count == null || count &lt; 1 || count &gt; 20;</bpmn2:conditionExpression>
     </bpmn2:sequenceFlow>
     <bpmn2:sequenceFlow id="_4-_5" sourceRef="Task_InputDependentInfo" targetRef="Task_Timeshare" />
     <bpmn2:sequenceFlow id="_Timeshare-_LIA" sourceRef="Task_Timeshare" targetRef="Task_LIA" />
@@ -74,8 +72,8 @@
       <bpmn2:incoming>_4-_5</bpmn2:incoming>
       <bpmn2:outgoing>_Timeshare-_LIA</bpmn2:outgoing>
       <bpmn2:ioSpecification id="IOSpec_Timeshare">
-        <bpmn2:dataInput id="Input_Timeshare_Namespace" name="Namespace" drools:dtype="String"/>
-        <bpmn2:dataInput id="Input_Timeshare_Model" name="Model" drools:dtype="String"/>
+        <bpmn2:dataInput id="Input_Timeshare_Namespace" name="namespace" drools:dtype="String"/>
+        <bpmn2:dataInput id="Input_Timeshare_Model" name="model" drools:dtype="String"/>
         <bpmn2:inputSet id="InputSet_Timeshare">
           <bpmn2:dataInputRefs>Input_Timeshare_Namespace</bpmn2:dataInputRefs>
           <bpmn2:dataInputRefs>Input_Timeshare_Model</bpmn2:dataInputRefs>
