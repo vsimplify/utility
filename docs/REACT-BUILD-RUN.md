@@ -20,9 +20,9 @@ This document outlines the commands used to build and run the application, categ
 
 ## NPM Commands (`npm`)
 
-| Command | Who (User/System) | What (Action) | Where (Context) | When (Trigger) | Why (Purpose) | Symptom Addressed |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| `npm run build` | User/CI | Compiles TypeScript/React code to JavaScript. | Project Root | After changing frontend code. | To generate the static assets (`.js` files) required for the React forms. | Missing React form functionality or outdated UI assets. |
+| Command | Who (User/System) | What (Action) | Where (Context) | When (Trigger) | Why (Purpose) | How (Method) | Symptom Addressed |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| `npm run build` | User/CI | Compiles TypeScript/React code to JavaScript. | Project Root | After changing frontend code. | To generate the static assets (`.js` files) required for the React forms. | Runs TypeScript compiler (`tsc`) followed by webpack in production mode to transpile TSX to JS and bundle assets into `src/main/resources/META-INF/resources/js/`. | Missing React form functionality or outdated UI assets. |
 
 ## Git Commands (`git`)
 
