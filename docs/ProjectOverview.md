@@ -30,12 +30,12 @@ The application uses MySQL for production-like environments. However, for local 
 
 ## React Form UI Fixes (Windows & Mac)
 
-### 5W & H Analysis
+### 5W & H Analysis: Deep Testing & Fixes
 
 | Aspect | Details |
 |--------|---------|
-| **What** | Fixed build errors preventing React forms from loading in Quarkus Dev UI on Windows and Mac |
-| **When** | During development phase to ensure cross-platform compatibility |
-| **Where** | `package.json` (Windows fix) and `pom.xml` (Mac fix) |
-| **Why** | To resolve `rm -rf` command failure on Windows and `IllegalArgumentException` caused by Mac metadata files |
-| **How** | 1. Replaced `rm -rf` with `rimraf` in `package.json` for cross-platform cleaning<br>2. Updated `pom.xml` to clean Mac metadata in `prepare-package` phase and exclude default directories<br>3. Verified build on Mac with skip flags for local environment issues |
+| **What** | Proactively identified and fixed hidden errors: 1) Backend logic mismatch (JSON vs int), 2) Mac metadata build failure, 3) Windows setup robustness. |
+| **When** | During deep testing phase, prior to final delivery. |
+| **Where** | `GuidelineCalculatorResource.java` (Logic), `pom.xml` (Build), `setup-windows.bat` (Setup). |
+| **Why** | To ensure the application runs successfully on `mvn quarkus:dev` without errors, complying with strict quality standards and preventing runtime failures. |
+| **How** | 1. Created `ChildrenCountRequest` DTO to match frontend JSON payload.<br>2. Configured `maven-clean-plugin` to clean `target/node` early, preventing `._*` file errors.<br>3. Added explicit clean steps to `setup-windows.bat`.<br>4. Validated with "Triple Validation" (3 successful consecutive builds). |
