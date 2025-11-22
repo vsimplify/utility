@@ -7,7 +7,7 @@
     "build": "tsc && webpack --mode=production",
     "dev": "tsc && webpack --mode=development",
     "watch": "tsc --watch",
-    "clean": "rimraf dist src/main/resources/META-INF/resources/js"
+    "clean": "rimraf dist && rimraf src/main/resources/META-INF/resources/js"
   },
   "dependencies": {
     "@patternfly/react-core": "^5.1.1",

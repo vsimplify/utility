@@ -157,6 +157,7 @@
             <configuration>
               <nodeVersion>v20.10.0</nodeVersion>
               <npmVersion>10.2.3</npmVersion>
+              <npmInheritsProxyConfigFromMaven>false</npmInheritsProxyConfigFromMaven>
             </configuration>
           </execution>
           <execution>

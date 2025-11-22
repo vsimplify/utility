@@ -1,43 +1,39 @@
 @echo off
-echo ========================================
-echo DCSS Guideline Calculator Forms Setup
-echo ========================================
-echo.
+echo ==========================================
+echo BAMOE 9.3 Windows Setup & Build Script
+echo ==========================================
 
-echo Step 1: Installing Node.js dependencies...
+echo [1/4] Checking Java version...
+java -version
+if %errorlevel% neq 0 (
+    echo Error: Java is not installed or not in PATH.
+    exit /b 1
+)
+
+echo [2/4] Cleaning previous builds...
+call mvn clean
+if %errorlevel% neq 0 (
+    echo Error: Maven clean failed.
+    exit /b 1
+)
+
+echo [3/4] Installing frontend dependencies...
+cd .
 call npm install
 if %errorlevel% neq 0 (
-    echo ERROR: npm install failed
-    pause
+    echo Error: npm install failed.
     exit /b 1
 )
-echo ✓ Node.js dependencies installed
-echo.
 
-echo Step 2: Cleaning previous builds...
-call npm run clean
+echo [4/4] Building project...
+call mvn install -DskipTests
 if %errorlevel% neq 0 (
-    echo WARNING: Clean failed. Continuing...
-)
-
-echo Step 3: Building forms...
-call npm run build
-if %errorlevel% neq 0 (
-    echo ERROR: npm run build failed
-    pause
+    echo Error: Maven install failed.
     exit /b 1
 )
-echo ✓ Forms built successfully
-echo.
 
-echo Step 3: Starting application...
-echo.
-echo Application will be available at:
-echo - Children Form: http://localhost:8080/forms/dcss-children-form.html
-echo - Dependent Form: http://localhost:8080/forms/dcss-dependent-form.html
-echo - BAMOE Dev UI: http://localhost:8080/q/dev-ui/extensions
-echo.
-echo Press Ctrl+C to stop the application
-echo.
-
-call mvn quarkus:dev
+echo ==========================================
+echo Build Successful!
+echo Run 'mvn quarkus:dev' to start the application.
+echo ==========================================
+pause
