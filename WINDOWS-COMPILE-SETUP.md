@@ -250,6 +250,8 @@ This script checks for:
 1. Presence of all React form files (`.tsx`, `.config`)
 2. Presence of the `.swidtag` file
 3. Correct H2 database configuration in `application.properties`
+4. Presence of critical Kogito Service URLs
+5. Correct CORS configuration
 
 If the script reports **[SUCCESS]**, you are ready to build!
 
