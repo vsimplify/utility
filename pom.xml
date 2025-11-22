@@ -134,16 +134,12 @@
     <resources>
       <resource>
         <directory>src/main/resources</directory>
-        <excludes>
-          <exclude>**/*.DS_Store</exclude>
-          <exclude>**/._*</exclude>
-        </excludes>
       </resource>
     </resources>
     <plugins>
 
 
-      <!-- Frontend Maven Plugin to build React app 
+      <!-- Frontend Maven Plugin to build React app -->
       <plugin>
         <groupId>com.github.eirslett</groupId>
         <artifactId>frontend-maven-plugin</artifactId>
@@ -185,7 +181,6 @@
           </execution>
         </executions>
       </plugin>
-      -->
 
       <!-- Standard Quarkus Maven Plugin -->
       <plugin>
@@ -199,27 +194,6 @@
               <goal>build</goal>
               <goal>generate-code</goal>
               <goal>generate-code-tests</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      
-      <!-- AntRun Plugin to clean Mac metadata -->
-      <plugin>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <version>3.1.0</version>
-        <executions>
-          <execution>
-            <phase>process-resources</phase>
-            <configuration>
-              <target>
-                <delete>
-                  <fileset dir="${project.build.directory}" includes="**/._*"/>
-                </delete>
-              </target>
-            </configuration>
-            <goals>
-              <goal>run</goal>
             </goals>
           </execution>
         </executions>
