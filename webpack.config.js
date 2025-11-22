@@ -6,7 +6,7 @@ module.exports = {
     'DcssDependentForm': './src/main/typescript/forms/DcssDependentForm.tsx'
   },
   output: {
-    path: path.resolve(__dirname, 'target/classes/META-INF/resources/js'),
+    path: path.resolve(__dirname, 'src/main/resources/custom-forms-dev'),
     filename: '[name].js',
     library: {
       type: 'umd',
