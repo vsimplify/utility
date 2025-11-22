@@ -34,6 +34,18 @@ Split the `clean` script to ensure `rimraf` executes correctly across different 
 "clean": "rimraf dist && rimraf src/main/resources/META-INF/resources/js"
 ```
 
+### Dev UI Configuration
+Added missing dependencies and properties to enable the BAMOE Dev UI card.
+
+**Dependencies (`pom.xml`):**
+- `kie-addons-quarkus-process-svg`: Enables process image visualization.
+- `kogito-addons-quarkus-jobs-management`: Enables jobs management console.
+- `kogito-addons-quarkus-data-index-jpa`: Provides data indexing for the console.
+
+**Properties (`application.properties`):**
+- `%dev.jbpm.devui.users.jdoe.groups=admin,HR,IT`: Configures a default user for the Dev UI task console.
+- `quarkus.kogito.devservices.enabled=false`: Disables auto-started dev services to prevent conflicts.
+
 ### TypeScript Configuration
 Updated `tsconfig.json` to match the Webpack output directory, ensuring consistency in build artifacts.
 
