@@ -5,7 +5,7 @@
 | Dimension | Details |
 | :--- | :--- |
 | **What** | Fixed `mvn clean install` and `mvn quarkus:dev` build errors to enable React forms in Quarkus Dev UI. |
-| **Who** | Sr. IBM BAMOE Developer (AI Agent). |
+| **Who** | Sr. IBM BAMOE Developer |
 | **When** | November 22, 2025. |
 | **Where** | `main` branch (Windows) and `mac-fix-forms-ui` branch (Mac). |
 | **Why** | Builds were failing due to missing `DataSource` configuration and missing React form files. Mac builds failed due to metadata file interference. |
