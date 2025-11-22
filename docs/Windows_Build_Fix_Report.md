@@ -34,6 +34,13 @@ Split the `clean` script to ensure `rimraf` executes correctly across different 
 "clean": "rimraf dist && rimraf src/main/resources/META-INF/resources/js"
 ```
 
+### TypeScript Configuration
+Updated `tsconfig.json` to match the Webpack output directory, ensuring consistency in build artifacts.
+
+```json
+"outDir": "src/main/resources/custom-forms-dev"
+```
+
 ## Verification Plan (Windows)
 
 ### Automated Build
@@ -43,13 +50,23 @@ sequenceDiagram
     participant Batch as setup-windows.bat
     participant Maven
     participant NPM
+    participant TSC as TypeScript Compiler
+    participant Webpack
 
     User->>Batch: Run script
     Batch->>Maven: mvn clean
     Batch->>NPM: npm install
     Batch->>Maven: mvn install -DskipTests
+    Maven->>NPM: npm run build
+    NPM->>TSC: Compile .tsx
+    NPM->>Webpack: Bundle to custom-forms-dev
     Maven-->>User: Build Success
 ```
+
+### Deep Code Verification
+- **PatternFly Compliance**: Verified that forms use standard `@patternfly/react-core` components (Page, Card, Form, etc.) as per BAMOE 9.3 guidelines.
+- **Output Consistency**: Confirmed `tsconfig.json` and `webpack.config.js` both target `src/main/resources/custom-forms-dev`.
+- **Manual Build**: `npm run build` successfully generates `.js` files in the correct location.
 
 ### Manual Steps
 1.  Open Command Prompt.
@@ -57,6 +74,7 @@ sequenceDiagram
 3.  Verify `Build Successful` message.
 4.  Run `mvn quarkus:dev`.
 5.  Access `http://localhost:8080/q/dev-ui/extensions`.
+
 
 ## Appendix: Citations
 
