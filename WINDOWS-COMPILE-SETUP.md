@@ -238,6 +238,23 @@ npm run build
 
 **The utility repository streamlines the `docs/compile` process by pre-applying all code fixes, making Windows setup much simpler!** 🎉
 
+## ✅ Verification Automation
+
+To ensure that your `main` branch is correctly synced with the required forms and configuration, run the provided verification script:
+
+```cmd
+verify-sync.bat
+```
+
+This script checks for:
+1. Presence of all React form files (`.tsx`, `.config`)
+2. Presence of the `.swidtag` file
+3. Correct H2 database configuration in `application.properties`
+
+If the script reports **[SUCCESS]**, you are ready to build!
+
+
+
 ## 💻 Command Reference (Cheatsheet)
 
 For manual execution or troubleshooting, here are the individual commands required to build the project components.
