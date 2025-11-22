@@ -30,10 +30,26 @@ call :CheckFile "%APP_PROP%"
 if exist "%APP_PROP%" (
     findstr /C:"quarkus.datasource.db-kind=h2" "%APP_PROP%" >nul
     if !errorlevel! neq 0 (
-        echo [FAIL] application.properties does not contain H2 datasource config
+        echo [FAIL] application.properties: Missing 'quarkus.datasource.db-kind=h2'
         set /a ERRORS+=1
     ) else (
-        echo [OK] application.properties contains H2 datasource config
+        echo [OK] application.properties: Found H2 datasource config
+    )
+
+    findstr /C:"kogito.service.url=http://localhost:8080" "%APP_PROP%" >nul
+    if !errorlevel! neq 0 (
+        echo [FAIL] application.properties: Missing 'kogito.service.url'
+        set /a ERRORS+=1
+    ) else (
+        echo [OK] application.properties: Found Kogito Service URL
+    )
+
+    findstr /C:"quarkus.http.cors.origins=*" "%APP_PROP%" >nul
+    if !errorlevel! neq 0 (
+        echo [FAIL] application.properties: Missing 'quarkus.http.cors.origins=*'
+        set /a ERRORS+=1
+    ) else (
+        echo [OK] application.properties: Found CORS Origins config
     )
 )
 
