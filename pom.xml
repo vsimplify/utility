@@ -145,6 +145,10 @@
     <finalName>${project.artifactId}</finalName>
       <resource>
         <directory>src/main/resources</directory>
+        <excludes>
+          <exclude>**/._*</exclude>
+          <exclude>**/.DS_Store</exclude>
+        </excludes>
       </resource>
     <plugins>
 
