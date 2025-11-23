@@ -23,6 +23,15 @@ call :CheckFile "%FORMS_DIR%\guidelinecalculator_EnterChildren.tsx"
 call :CheckFile "%FORMS_DIR%\guidelinecalculator_lnputDependentlnfo.config"
 call :CheckFile "%FORMS_DIR%\guidelinecalculator_lnputDependentlnfo.tsx"
 
+:: 2b. Verify POM Structure (Fix for Malformed POM)
+findstr /C:"<resources>" "pom.xml" >nul
+if !errorlevel! neq 0 (
+    echo [FAIL] pom.xml: Missing 'resources' wrapper tag. Please 'git pull'.
+    set /a ERRORS+=1
+) else (
+    echo [OK] pom.xml: Found 'resources' tag (Malformed POM fix verified)
+)
+
 :: 3. Verify Application Properties Configuration
 set "APP_PROP=src\main\resources\application.properties"
 call :CheckFile "%APP_PROP%"
