@@ -203,6 +203,12 @@
             </goals>
           </execution>
         </executions>
+        <configuration>
+          <ignoredEntries>
+            <ignoredEntry>**/._*</ignoredEntry>
+            <ignoredEntry>**/.DS_Store</ignoredEntry>
+          </ignoredEntries>
+        </configuration>
       </plugin>
     </plugins>
   </build>
