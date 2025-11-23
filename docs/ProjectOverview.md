@@ -20,3 +20,9 @@
 - **Files Restored**: `Guidelinecalculator.tsx`, `*.config`, `.swidtag`.
 - **Configuration**: Added `quarkus.datasource` (H2) to `application.properties`.
 - **Mac Optimization**: Added resource exclusions in `pom.xml` on Mac branch.
+
+## 🔧 Troubleshooting
+### Error: `Malformed POM ... Unrecognised tag: 'resource'`
+**Cause:** The `<resource>` tag was placed directly under `<build>` without a `<resources>` wrapper.
+**Fix:** This has been fixed in the `main` branch.
+**Action Required:** Run `git pull origin main` on your Windows machine to get the fix.
