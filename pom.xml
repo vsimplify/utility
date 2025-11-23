@@ -152,37 +152,44 @@
 
 
       <!-- Frontend Maven Plugin to build React app -->
-      <!-- Exec Maven Plugin to use system Node/NPM on Mac -->
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>exec-maven-plugin</artifactId>
-        <version>3.1.0</version>
+        <groupId>com.github.eirslett</groupId>
+        <artifactId>frontend-maven-plugin</artifactId>
+        <version>1.15.0</version>
+        <configuration>
+          <workingDirectory>${project.basedir}</workingDirectory>
+          <installDirectory>${project.build.directory}</installDirectory>
+        </configuration>
         <executions>
+          <execution>
+            <id>install node and npm</id>
+            <goals>
+              <goal>install-node-and-npm</goal>
+            </goals>
+            <configuration>
+              <nodeVersion>v20.10.0</nodeVersion>
+              <npmVersion>10.2.3</npmVersion>
+              <npmInheritsProxyConfigFromMaven>false</npmInheritsProxyConfigFromMaven>
+            </configuration>
+          </execution>
           <execution>
             <id>npm install</id>
             <goals>
-              <goal>exec</goal>
+              <goal>npm</goal>
             </goals>
             <phase>generate-resources</phase>
             <configuration>
-              <executable>npm</executable>
-              <arguments>
-                <argument>install</argument>
-              </arguments>
+              <arguments>install</arguments>
             </configuration>
           </execution>
           <execution>
             <id>npm run build</id>
             <goals>
-              <goal>exec</goal>
+              <goal>npm</goal>
             </goals>
             <phase>generate-resources</phase>
             <configuration>
-              <executable>npm</executable>
-              <arguments>
-                <argument>run</argument>
-                <argument>build</argument>
-              </arguments>
+              <arguments>run build</arguments>
             </configuration>
           </execution>
         </executions>
@@ -203,12 +210,6 @@
             </goals>
           </execution>
         </executions>
-        <configuration>
-          <ignoredEntries>
-            <ignoredEntry>**/._*</ignoredEntry>
-            <ignoredEntry>**/.DS_Store</ignoredEntry>
-          </ignoredEntries>
-        </configuration>
       </plugin>
     </plugins>
   </build>
