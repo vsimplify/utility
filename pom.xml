@@ -155,9 +155,6 @@
     <plugins>
 
 
-    <plugins>
-
-
       <!-- Exec Maven Plugin to use system Node/NPM on Mac -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
