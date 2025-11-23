@@ -22,7 +22,9 @@
 - **Mac Optimization**: Added resource exclusions in `pom.xml` on Mac branch.
 
 ## 🔧 Troubleshooting
-### Error: `Malformed POM ... Unrecognised tag: 'resource'`
-**Cause:** The `<resource>` tag was placed directly under `<build>` without a `<resources>` wrapper.
-**Fix:** This has been fixed in the `main` branch.
-**Action Required:** Run `git pull origin main` on your Windows machine to get the fix.
+### Error: `ConfigurationException: Datasource must be defined` or `NoSuchFileException`
+**Cause:** Mac metadata files (e.g., `._application.properties`) are present in your Windows workspace, confusing the build system.
+**Fix:** I have updated `pom.xml` on `main` to explicitly exclude these files.
+**Action Required:**
+1. Run `git pull origin main`.
+2. Run `mvn clean install`.
